@@ -17,29 +17,33 @@ session.
 This repository contains:
 
 - `skill.md`
-- `install.sh`
 - `skill.json`
 - `skills/clawhouse-creator-onboarding/SKILL.md`
 - a bundled local-dev NEAR wallet tool under
   `skills/clawhouse-creator-onboarding/tools/near-wallet`
 
-## Install In Claude Code
+## Install The Skill
+
+Do not pipe a remote script into bash. Install the skill package directly.
 
 Claude Code discovers personal skills from `~/.claude/skills`.
 
-No `git clone` install:
+Install the directory `skills/clawhouse-creator-onboarding/` to:
 
-```bash
-curl -fsSL https://raw.githubusercontent.com/edwardchew97/clawhouse-onboarding-kit/main/install.sh | bash
+```text
+~/.claude/skills/clawhouse-creator-onboarding/
 ```
 
-Pinned release:
+The installed entrypoint should be:
 
-```bash
-curl -fsSL https://raw.githubusercontent.com/edwardchew97/clawhouse-onboarding-kit/main/install.sh | CLAWHOUSE_ONBOARDING_REF=v0.2.0 bash
+```text
+~/.claude/skills/clawhouse-creator-onboarding/SKILL.md
 ```
 
-Manual install:
+For claude.ai or Claude Desktop custom Skills, upload the release ZIP from the
+GitHub Releases page.
+
+Manual install from a trusted local checkout:
 
 ```bash
 git clone https://github.com/edwardchew97/clawhouse-onboarding-kit.git /tmp/clawhouse-onboarding-kit

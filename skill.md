@@ -1,7 +1,7 @@
 ---
 name: clawhouse
-version: 0.2.0
-description: Public launcher for ClawHouse creator onboarding. Install the Claude Code skill, generate or bind public NEAR wallet metadata, and prepare a draft IronClaw trading-agent capsule.
+version: 0.2.1
+description: Public launcher for ClawHouse creator onboarding. Install the ClawHouse skill package, then run the local creator-onboarding skill.
 homepage: https://github.com/edwardchew97/clawhouse-onboarding-kit
 metadata: {"clawhouse":{"category":"creator-onboarding","wallet_tool":"bundled","custody":"local-dev-only"}}
 ---
@@ -16,31 +16,37 @@ onboarding skill.
 | File | URL |
 |------|-----|
 | **skill.md** (this file) | `https://raw.githubusercontent.com/edwardchew97/clawhouse-onboarding-kit/main/skill.md` |
-| **install.sh** | `https://raw.githubusercontent.com/edwardchew97/clawhouse-onboarding-kit/main/install.sh` |
-| **Claude skill** | `https://raw.githubusercontent.com/edwardchew97/clawhouse-onboarding-kit/main/skills/clawhouse-creator-onboarding/SKILL.md` |
+| **Claude Code skill source** | `https://raw.githubusercontent.com/edwardchew97/clawhouse-onboarding-kit/main/skills/clawhouse-creator-onboarding/SKILL.md` |
 | **skill.json** | `https://raw.githubusercontent.com/edwardchew97/clawhouse-onboarding-kit/main/skill.json` |
 | **GitHub repo** | `https://github.com/edwardchew97/clawhouse-onboarding-kit` |
 
 ## Start Here
 
-If the user asks to start ClawHouse creator onboarding from this URL, do this:
+Do not run a remote installer script. Installing this skill means installing the
+skill package, not executing setup code.
 
-1. Install the Claude Code skill locally with the command below.
-2. Continue the onboarding flow in the current session from this document.
-3. Tell the user that future Claude Code sessions can invoke it with
-   `/clawhouse-creator-onboarding`.
+If the user is in Claude Code or Cowork with local file access:
 
-Install locally, without `git clone`:
+1. Install the skill directory
+   `skills/clawhouse-creator-onboarding/` into:
 
-```bash
-curl -fsSL https://raw.githubusercontent.com/edwardchew97/clawhouse-onboarding-kit/main/install.sh | bash
-```
+   `~/.claude/skills/clawhouse-creator-onboarding/`
 
-To install a pinned release instead of `main`:
+2. Verify that this file exists after install:
 
-```bash
-curl -fsSL https://raw.githubusercontent.com/edwardchew97/clawhouse-onboarding-kit/main/install.sh | CLAWHOUSE_ONBOARDING_REF=v0.2.0 bash
-```
+   `~/.claude/skills/clawhouse-creator-onboarding/SKILL.md`
+
+3. Start with:
+
+   `/clawhouse-creator-onboarding`
+
+If the user is in claude.ai or Claude Desktop without local skill-directory
+access, ask them to upload the release ZIP from:
+
+`https://github.com/edwardchew97/clawhouse-onboarding-kit/releases`
+
+If installation is unavailable, continue from this launcher in the current
+conversation only and tell the user it is not persistent.
 
 ## Security Rules
 
