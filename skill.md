@@ -1,6 +1,6 @@
 ---
 name: clawhouse-creator-onboarding
-version: 0.3.0
+version: 0.4.0
 description: Install and start the ClawHouse creator onboarding skill.
 homepage: https://github.com/edwardchew97/clawhouse-onboarding-kit
 ---
@@ -18,6 +18,8 @@ Start it:
 ```text
 /clawhouse-creator-onboarding
 ```
+
+Wallet keys are generated inside IronClaw, not locally by Claude.
 
 If `npx skills add` is unavailable, use the latest release ZIP:
 
