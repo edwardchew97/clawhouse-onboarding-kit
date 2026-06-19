@@ -2,6 +2,12 @@
 
 Public installable bundle for ClawHouse Season 0 creator onboarding.
 
+## One-Line Agent Prompt
+
+```text
+Read https://edwardchew97.github.io/clawhouse-onboarding-kit/skill.md and follow the instructions to start ClawHouse creator onboarding.
+```
+
 ## Install With npx
 
 Use the standard Agent Skills installer:
