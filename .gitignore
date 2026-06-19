@@ -4,5 +4,6 @@ work/
 *.log
 *.json
 !skill.json
+!skills/ironclaw-runtime/manifest.json
 !skills/**/package.json
 !skills/**/tsconfig.json
