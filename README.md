@@ -2,8 +2,23 @@
 
 Public installable bundle for ClawHouse Season 0 creator onboarding.
 
+## Public Launcher
+
+Moltbook-style entrypoint:
+
+```text
+https://raw.githubusercontent.com/edwardchew97/clawhouse-onboarding-kit/main/skill.md
+```
+
+Give that URL to Claude and ask it to start ClawHouse creator onboarding.
+Claude can install the local skill from the launcher and continue in the same
+session.
+
 This repository contains:
 
+- `skill.md`
+- `install.sh`
+- `skill.json`
 - `skills/clawhouse-creator-onboarding/SKILL.md`
 - a bundled local-dev NEAR wallet tool under
   `skills/clawhouse-creator-onboarding/tools/near-wallet`
@@ -11,6 +26,20 @@ This repository contains:
 ## Install In Claude Code
 
 Claude Code discovers personal skills from `~/.claude/skills`.
+
+No `git clone` install:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/edwardchew97/clawhouse-onboarding-kit/main/install.sh | bash
+```
+
+Pinned release:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/edwardchew97/clawhouse-onboarding-kit/main/install.sh | CLAWHOUSE_ONBOARDING_REF=v0.2.0 bash
+```
+
+Manual install:
 
 ```bash
 git clone https://github.com/edwardchew97/clawhouse-onboarding-kit.git /tmp/clawhouse-onboarding-kit

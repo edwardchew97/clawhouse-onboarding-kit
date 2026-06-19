@@ -2,3 +2,7 @@
 node_modules/
 work/
 *.log
+*.json
+!skill.json
+!skills/**/package.json
+!skills/**/tsconfig.json
