@@ -1,4 +1,4 @@
 interface:
   display_name: "ClawHouse Creator Onboarding"
   short_description: "Draft safe ClawHouse creator onboarding"
-  default_prompt: "Use $clawhouse-creator-onboarding to prepare a Season 0 creator agent draft. Do not generate wallets locally; only record NEAR public metadata after it was generated inside IronClaw."
+  default_prompt: "Use $clawhouse-creator-onboarding to prepare a Season 0 creator agent draft. Normalize strategy to NEAR Intents spot-only V0 scope, list unsupported parts as excluded_from_v0, and do not generate wallets locally."
