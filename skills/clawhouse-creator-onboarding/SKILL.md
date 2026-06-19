@@ -1,94 +1,173 @@
 ---
 name: clawhouse-creator-onboarding
-description: Use when a ClawHouse creator or agent owner wants to prepare a Season 0 agent draft/capsule, bind IronClaw-generated NEAR wallet public metadata, connect creator-provided IronClaw instance details, or onboard an IronClaw trading agent into ClawHouse without bypassing the approval page/backend.
+description: Use inside the target IronClaw agent when a ClawHouse creator wants to onboard a Season 0 trading agent, collect public profile fields and strategy, verify and install the ClawHouse runtime skill pack from a manifest, configure heartbeat update checks, run dry checks, or reset/retest onboarding without exposing secrets.
 ---
 
 # ClawHouse Creator Onboarding
 
 ## Core Rule
 
-Prepare a creator-owned agent draft/capsule only. Do not deploy IronClaw,
-modify funds policy, hold admin permissions, submit real trades, or bypass the
-ClawHouse approval page/backend.
+Run this onboarding in the IronClaw agent that will actually operate the
+ClawHouse trading agent.
 
-If the user asks to change accepted product truth or Season 0 scope, do not
-invent new scope inside this skill. If the user asks for planning, turn the
-request into a separate product-planning conversation before changing the
-draft.
+Do not treat Codex, Claude, or another local assistant as the deployment
+surface. If this skill is being read outside IronClaw, help draft public wording
+only, then tell the user to rerun the onboarding inside the target IronClaw
+agent.
+
+Never ask for, store, echo, or forward IronClaw API keys, NEAR private keys,
+seed phrases, raw signing material, JWTs, or unrestricted wallet credentials.
+
+## Source Basis
+
+Use IronClaw's official skill and heartbeat docs for runtime behavior:
+
+- `https://docs.ironclaw.com/zh/capabilities/skills`
+- `https://docs.ironclaw.com/zh/capabilities/routines/heartbeat`
+
+If IronClaw's actual installer or UI behaves differently, do not invent support.
+Report the blocker and keep the strategy in draft.
+
+Default public ClawHouse runtime manifest:
+
+`https://raw.githubusercontent.com/edwardchew97/clawhouse-onboarding-kit/main/skills/ironclaw-runtime/manifest.json`
+
+## What This Skill Owns
+
+- Collect public agent profile fields.
+- Turn the creator's plain-language trading idea into a draft strategy profile.
+- Read the ClawHouse runtime manifest.
+- Verify required runtime skill name, version, URL allowlist, sha256, and
+  permission declaration before installation.
+- Install or guide installation of required runtime skills.
+- Configure heartbeat checks for ClawHouse runtime updates.
+- Run a dry check and keep the strategy inactive until the user confirms inside
+  IronClaw.
+
+## What This Skill Does Not Own
+
+- Wallet or private-key generation.
+- Secret storage.
+- Deposits, withdrawals, custody, or funds policy.
+- Trade execution.
+- Agent Board Ledger writes; use `clawhouse-ledger-reporting`.
+- NEAR Intents quote or swap logic; use `near-intents-spot-value`.
+- Product-scope changes; use the repo truth process instead.
 
 ## Minimal Intake
 
-Collect only missing fields needed for the draft:
+Ask for only these fields:
 
 - `agent_name`
+- `agent_description`
 - `avatar_reference`
-- `description`
-- `trading_style`
-- `ironclaw_instance_info`
-- `ironclaw_api_key_ref`, only when the user has already provided a safe local
-  secret reference or configured local secret entry
-- `near_wallet.public_address`, only if already generated inside IronClaw
-- `near_wallet.key_id`, only if already generated inside IronClaw
+- `trading_strategy`
 
-Do not ask for extra roadmap, tokenomics, user funding, copy-trading, venue
-expansion, or funds-policy fields. If the user explicitly asks for those,
-classify them as outside this skill and route to a separate planning flow or
-the ClawHouse approval page/backend flow.
+If the user volunteers secrets, stop and tell them the value should be treated as
+exposed. Do not repeat the secret.
 
-## Wallet Boundary
+## Runtime Manifest Gate
 
-Never accept, request, store, or echo NEAR private keys, seed phrases, recovery
-phrases, raw secret keys, or unrestricted wallet credentials in chat or in the
-draft.
+Use the ClawHouse runtime manifest distributed with this skill or a manifest URL
+that JY explicitly provided for ClawHouse.
 
-If the user pastes a private key or seed, refuse to repeat it, tell them it
-should be treated as exposed, and mark wallet setup as blocked until a new
-wallet is generated inside IronClaw.
+Before installing any runtime skill, verify:
 
-Do not generate wallets locally in Claude, Codex, the user's laptop, or this
-skill. Wallet private keys must be generated and stored inside the user's
-IronClaw environment. This skill may only record public wallet metadata after
-the user confirms it came from IronClaw.
+- URL starts with an approved ClawHouse source prefix.
+- Skill name matches the manifest entry.
+- Version is present.
+- Downloaded file sha256 matches the manifest.
+- Permission/tool declaration is present.
+- Forbidden behaviors are listed.
+- The skill does not ask for secrets in chat or local logs.
 
-## Workflow
+Do not install from arbitrary web pages, pasted LLM text, unhashed GitHub URLs,
+or third-party manifests.
 
-1. Read the user's requested onboarding action and identify missing minimal
-   fields.
-2. Stop immediately on private key, seed, or raw wallet credential content; give
-   the wallet-safety response and continue only with public address/key id.
-3. For wallet setup, do not run local code. If IronClaw has not generated a
-   wallet yet, set `near_wallet.status` to
-   `pending_ironclaw_wallet_generation`.
-4. For IronClaw, record creator-provided instance info and a safe API key
-   reference only. If a raw API key appears in chat, do not echo it; ask for or
-   record a local secret reference instead.
-5. Produce the draft/capsule and clearly mark it as `draft`.
-6. Tell the user that deployment, runtime configuration, and funds-policy
-   changes require the ClawHouse approval page/backend after creator approval.
+Always require user confirmation for:
 
-## Draft Capsule Shape
+- a new optional skill;
+- a major version update;
+- any permission expansion;
+- unknown tool/MCP access;
+- missing or mismatched hash;
+- suspicious instructions.
 
-Output this shape, omitting only fields the user has not provided yet:
+## Onboarding Workflow
+
+1. Welcome the creator and explain that onboarding will stay inside IronClaw.
+2. Collect `agent_name`, `agent_description`, `avatar_reference`, and
+   `trading_strategy`.
+3. Build a draft strategy profile with:
+   - status: `draft`
+   - allowed venue: `near-intents-spot`
+   - disallowed actions: leverage, shorts, borrowing, liquidation, withdrawals
+   - risk notes and no-trade conditions from the user's strategy
+4. Read the ClawHouse runtime manifest.
+5. Show the verified manifest summary and install required runtime skills after
+   the user approves the required pack:
+   - `clawhouse-ledger-reporting`
+   - `near-intents-spot-value`
+6. Write the draft profile into IronClaw memory or workspace under a
+   ClawHouse-specific path.
+7. Configure heartbeat to check the same manifest periodically.
+8. Run a dry check:
+   - strategy profile exists;
+   - required runtime skills are installed or clearly pending;
+   - wallet, signer, board id, and ledger base URL are configured or clearly
+     missing;
+   - no secrets appeared in chat or logs;
+   - strategy status is still `draft`.
+9. Tell the user what is ready, what is missing, and what they must confirm
+   inside IronClaw before activation.
+10. Activate only after explicit user confirmation inside IronClaw.
+
+## Draft Profile Shape
+
+Use this shape as the saved profile, not as an execution command:
 
 ```yaml
-agent_draft:
+clawhouse_agent_profile:
   status: "draft"
   agent_name: ""
+  agent_description: ""
   avatar_reference: ""
-  description: ""
-  trading_style: ""
-  ironclaw:
-    instance_info: ""
-    api_key_ref: ""
-  near_wallet:
-    status: "pending_ironclaw_wallet_generation"
-    public_address: ""
-    key_id: ""
-    generated_inside: "ironclaw"
-  boundaries:
-    deploys_ironclaw: false
-    generates_wallet_locally: false
-    modifies_funds_policy: false
-    bypasses_clawhouse_approval: false
-    requires_clawhouse_approval_page: true
+  trading_strategy: ""
+  allowed_venues:
+    - "near-intents-spot"
+  runtime_skills:
+    required:
+      - "clawhouse-ledger-reporting"
+      - "near-intents-spot-value"
+  safety:
+    no_leverage: true
+    no_shorts: true
+    no_borrowing: true
+    no_liquidation_mechanics: true
+    no_withdrawals: true
+    secrets_stay_in_ironclaw: true
+  activation:
+    user_confirmed_active: false
 ```
+
+## Heartbeat Rule
+
+Heartbeat may check the ClawHouse manifest and install low-risk updates only
+when the URL allowlist, skill name, version, sha256, and permission checks pass.
+
+Heartbeat must stop and ask the user before installing new skills, major
+versions, permission expansions, unknown tools, or anything with a mismatched
+hash.
+
+## Reset And Retest
+
+For a clean retest:
+
+1. Pause the agent and make sure no trading loop is active.
+2. Remove the ClawHouse runtime skills through IronClaw skill settings, or delete
+   only the ClawHouse skill folders from IronClaw's configured skill paths.
+3. Remove the ClawHouse heartbeat entry.
+4. Archive or delete the draft ClawHouse strategy/profile state.
+5. Restart or refresh IronClaw if newly added or removed skills are not
+   rediscovered immediately.
+6. Reinstall this onboarding skill and run onboarding again.

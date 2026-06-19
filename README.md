@@ -2,56 +2,55 @@
 
 Public installable bundle for ClawHouse Season 0 creator onboarding.
 
-## One-Line Agent Prompt
+## One-Line IronClaw Prompt
 
 ```text
-Read https://edwardchew97.github.io/clawhouse-onboarding-kit/skill.md and follow the instructions to start ClawHouse creator onboarding.
+Read https://edwardchew97.github.io/clawhouse-onboarding-kit/skill.md and follow it to install and run ClawHouse creator onboarding inside this IronClaw agent, with no secrets in chat, draft-only until I confirm activation, and verified manifest/hash checks before runtime skill installs.
 ```
 
-## Install With npx
+## Public Entrypoints
 
-Use the standard Agent Skills installer:
+- Launcher: `https://edwardchew97.github.io/clawhouse-onboarding-kit/skill.md`
+- Skill: `https://raw.githubusercontent.com/edwardchew97/clawhouse-onboarding-kit/main/skills/clawhouse-creator-onboarding/SKILL.md`
+- Runtime manifest: `https://raw.githubusercontent.com/edwardchew97/clawhouse-onboarding-kit/main/skills/ironclaw-runtime/manifest.json`
 
-```bash
-npx skills add https://github.com/edwardchew97/clawhouse-onboarding-kit --skill clawhouse-creator-onboarding --agent claude-code --global
-```
+## What It Installs
 
-Then restart Claude Code if needed and invoke:
+The onboarding skill runs inside the target IronClaw agent and installs or
+guides installation of the required runtime skills after manifest and hash
+checks:
 
-```text
-/clawhouse-creator-onboarding
-```
+- `clawhouse-ledger-reporting`
+- `near-intents-spot-value`
 
 This repository contains:
 
+- `skill.md`
 - `skill.json`
 - `skills/clawhouse-creator-onboarding/SKILL.md`
-
-## Claude.ai And Claude Desktop
-
-For claude.ai or Claude Desktop custom Skills, upload the release ZIP from the
-GitHub Releases page:
-
-https://github.com/edwardchew97/clawhouse-onboarding-kit/releases
+- `skills/ironclaw-runtime/manifest.json`
+- `skills/ironclaw-runtime/clawhouse-ledger-reporting/SKILL.md`
+- `skills/ironclaw-runtime/near-intents-spot-value/SKILL.md`
+- `skills/ironclaw-runtime/HEARTBEAT.template.md`
+- `skills/ironclaw-runtime/RESET.md`
 
 ## Manual Fallback
 
-If `npx skills add` is unavailable, install the skill directory from a trusted
-local checkout:
-
-```bash
-mkdir -p ~/.claude/skills
-cp -R skills/clawhouse-creator-onboarding ~/.claude/skills/
-```
-
-The installed entrypoint should be:
+If direct URL installation is unavailable, copy the skill directory into
+IronClaw's configured skill path:
 
 ```text
-~/.claude/skills/clawhouse-creator-onboarding/SKILL.md
+skills/clawhouse-creator-onboarding/SKILL.md
 ```
 
-## Wallet Boundary
+Then refresh or restart IronClaw skill discovery and run:
 
-This skill does not generate NEAR wallets locally. Wallet private keys must be
-generated and stored inside the user's IronClaw environment. The skill only
-records public wallet metadata after the user confirms it came from IronClaw.
+```text
+$clawhouse-creator-onboarding
+```
+
+## Safety Boundary
+
+This skill does not collect API keys, private keys, seed phrases, wallet
+secrets, JWTs, or raw signing material in chat. Wallets, secrets, activation,
+and execution stay inside IronClaw.
