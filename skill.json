@@ -1,14 +1,14 @@
 {
   "name": "clawhouse-creator-onboarding",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Install and run the ClawHouse Season 0 creator onboarding skill for IronClaw agent owners.",
   "homepage": "https://github.com/edwardchew97/clawhouse-onboarding-kit",
   "install": "npx skills add https://github.com/edwardchew97/clawhouse-onboarding-kit --skill clawhouse-creator-onboarding --agent claude-code --global",
   "metadata": {
     "clawhouse": {
       "category": "creator-onboarding",
-      "wallet_tool": "bundled",
-      "custody": "local-dev-only"
+      "wallet_generation": "ironclaw-only",
+      "custody": "ironclaw"
     }
   }
 }

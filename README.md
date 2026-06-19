@@ -26,8 +26,6 @@ This repository contains:
 
 - `skill.json`
 - `skills/clawhouse-creator-onboarding/SKILL.md`
-- a bundled local-dev NEAR wallet tool under
-  `skills/clawhouse-creator-onboarding/tools/near-wallet`
 
 ## Claude.ai And Claude Desktop
 
@@ -52,16 +50,8 @@ The installed entrypoint should be:
 ~/.claude/skills/clawhouse-creator-onboarding/SKILL.md
 ```
 
-## Wallet Tool Smoke Test
+## Wallet Boundary
 
-```bash
-cd ~/.claude/skills/clawhouse-creator-onboarding/tools/near-wallet
-bun install
-bun run typecheck
-bun run test
-bun run generate -- --out /tmp/clawhouse-test-wallet.json --overwrite
-bun run inspect -- --key-file /tmp/clawhouse-test-wallet.json
-```
-
-The CLI output must show only `walletAddress`, `publicKey`, `keyId`, and
-`keyFile`. It must not print the NEAR private key.
+This skill does not generate NEAR wallets locally. Wallet private keys must be
+generated and stored inside the user's IronClaw environment. The skill only
+records public wallet metadata after the user confirms it came from IronClaw.

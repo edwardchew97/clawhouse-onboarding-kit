@@ -1,6 +1,6 @@
 ---
 name: clawhouse-creator-onboarding
-description: Use when a ClawHouse creator or agent owner wants to prepare a Season 0 agent draft/capsule, generate or bind NEAR wallet public metadata, connect creator-provided IronClaw instance details, or onboard an IronClaw trading agent into ClawHouse without bypassing the approval page/backend.
+description: Use when a ClawHouse creator or agent owner wants to prepare a Season 0 agent draft/capsule, bind IronClaw-generated NEAR wallet public metadata, connect creator-provided IronClaw instance details, or onboard an IronClaw trading agent into ClawHouse without bypassing the approval page/backend.
 ---
 
 # ClawHouse Creator Onboarding
@@ -27,50 +27,28 @@ Collect only missing fields needed for the draft:
 - `ironclaw_instance_info`
 - `ironclaw_api_key_ref`, only when the user has already provided a safe local
   secret reference or configured local secret entry
-- `near_wallet.public_address`
-- `near_wallet.key_id`
+- `near_wallet.public_address`, only if already generated inside IronClaw
+- `near_wallet.key_id`, only if already generated inside IronClaw
 
 Do not ask for extra roadmap, tokenomics, user funding, copy-trading, venue
 expansion, or funds-policy fields. If the user explicitly asks for those,
 classify them as outside this skill and route to a separate planning flow or
 the ClawHouse approval page/backend flow.
 
-## Wallet Safety
+## Wallet Boundary
 
 Never accept, request, store, or echo NEAR private keys, seed phrases, recovery
 phrases, raw secret keys, or unrestricted wallet credentials in chat or in the
 draft.
 
 If the user pastes a private key or seed, refuse to repeat it, tell them it
-should be treated as exposed, and direct them to generate a new wallet with the
-bundled ClawHouse NEAR wallet tool.
+should be treated as exposed, and mark wallet setup as blocked until a new
+wallet is generated inside IronClaw.
 
-Use the bundled wallet tool at:
-
-```bash
-${CLAUDE_SKILL_DIR}/tools/near-wallet
-```
-
-The wallet tool is local-dev only. It writes plaintext key material to the exact
-ignored local path provided by the caller and prints only public metadata:
-`walletAddress`, `publicKey`, `keyId`, and `keyFile`.
-
-Recommended wallet generation command:
-
-```bash
-cd ${CLAUDE_SKILL_DIR}/tools/near-wallet
-bun install
-bun run generate -- --out <ignored-local-wallet-file>
-```
-
-Recommended public inspection command:
-
-```bash
-cd ${CLAUDE_SKILL_DIR}/tools/near-wallet
-bun run inspect -- --key-file <ignored-local-wallet-file>
-```
-
-Capture only the public wallet address and key id returned by that tool.
+Do not generate wallets locally in Claude, Codex, the user's laptop, or this
+skill. Wallet private keys must be generated and stored inside the user's
+IronClaw environment. This skill may only record public wallet metadata after
+the user confirms it came from IronClaw.
 
 ## Workflow
 
@@ -78,8 +56,9 @@ Capture only the public wallet address and key id returned by that tool.
    fields.
 2. Stop immediately on private key, seed, or raw wallet credential content; give
    the wallet-safety response and continue only with public address/key id.
-3. For wallet generation or binding, use the bundled wallet tool; do not invent
-   wallet output.
+3. For wallet setup, do not run local code. If IronClaw has not generated a
+   wallet yet, set `near_wallet.status` to
+   `pending_ironclaw_wallet_generation`.
 4. For IronClaw, record creator-provided instance info and a safe API key
    reference only. If a raw API key appears in chat, do not echo it; ask for or
    record a local secret reference instead.
@@ -102,10 +81,13 @@ agent_draft:
     instance_info: ""
     api_key_ref: ""
   near_wallet:
+    status: "pending_ironclaw_wallet_generation"
     public_address: ""
     key_id: ""
+    generated_inside: "ironclaw"
   boundaries:
     deploys_ironclaw: false
+    generates_wallet_locally: false
     modifies_funds_policy: false
     bypasses_clawhouse_approval: false
     requires_clawhouse_approval_page: true
