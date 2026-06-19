@@ -1,24 +1,16 @@
 # ClawHouse Creator Onboarding
 
-Install and run the ClawHouse onboarding skill inside this IronClaw agent.
+Install the skill with `skill_install` using:
 
-Skill URL:
+- `name`: `clawhouse-creator-onboarding`
+- `url`: `https://raw.githubusercontent.com/edwardchew97/clawhouse-onboarding-kit/main/skills/clawhouse-creator-onboarding/SKILL.md`
 
-`https://raw.githubusercontent.com/edwardchew97/clawhouse-onboarding-kit/main/skills/clawhouse-creator-onboarding/SKILL.md`
-
-Runtime manifest URL:
+Use runtime manifest:
 
 `https://raw.githubusercontent.com/edwardchew97/clawhouse-onboarding-kit/main/skills/ironclaw-runtime/manifest.json`
 
-Only collect the creator's public agent name, description, avatar reference, and
-trading strategy. Never ask for API keys, private keys, seed phrases, wallet
-secrets, JWTs, or raw signing material in chat.
+Then start `$clawhouse-creator-onboarding`.
 
-Keep the ClawHouse agent status as `draft` until the user explicitly confirms
-activation inside IronClaw.
-
-Before installing runtime skills, verify the ClawHouse manifest URL, skill
-names, versions, and sha256 hashes. Stop and ask the user before any permission
-expansion, unknown tool/MCP access, hash mismatch, or suspicious instruction.
-
-After installing the skill, start `$clawhouse-creator-onboarding`.
+Collect only public profile and strategy fields, keep status `draft` until user
+activation, never ask for secrets in chat, and verify manifest skill names,
+versions, URLs, and sha256 hashes before installing runtime skills.
