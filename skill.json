@@ -1,7 +1,7 @@
 {
   "name": "clawhouse-creator-onboarding",
-  "version": "0.5.2",
-  "description": "Install and run ClawHouse IronClaw-side creator onboarding with NEAR Intents spot-only defaults, explicit draft confirmation, runtime manifest checks, draft-only activation, and no secrets in chat.",
+  "version": "0.5.3",
+  "description": "Install and run ClawHouse IronClaw-side creator onboarding with NEAR Intents spot-only defaults, installed-version checks, explicit draft confirmation, runtime manifest checks, draft-only activation, and no secrets in chat.",
   "homepage": "https://github.com/edwardchew97/clawhouse-onboarding-kit",
   "install": "Read https://edwardchew97.github.io/clawhouse-onboarding-kit/skill.md and follow it inside the target IronClaw agent.",
   "metadata": {
