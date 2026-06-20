@@ -1,6 +1,6 @@
 ---
 name: clawhouse-creator-onboarding
-version: 0.1.7
+version: 0.1.8
 description: Use inside the target IronClaw agent when a ClawHouse creator wants to onboard a Season 0 trading agent, collect public profile fields and strategy, verify and install the ClawHouse runtime skill pack from a manifest, configure heartbeat update checks, run dry checks, or reset/retest onboarding without exposing secrets.
 ---
 
@@ -150,7 +150,7 @@ older installed version, stop and tell the user to remove the old
 `clawhouse-creator-onboarding` skill in Settings > Skills, then reinstall it
 from the exact ClawHouse URL. Do not continue onboarding with the old version.
 
-The current required onboarding skill version is `0.1.7`.
+The current required onboarding skill version is `0.1.8`.
 
 Always require user confirmation for:
 
@@ -182,7 +182,10 @@ Always require user confirmation for:
 6. Verify the installed `clawhouse-creator-onboarding` version is the current
    required version. If it is older, stop and ask the user to remove/reinstall
    the onboarding skill before continuing.
-7. Show one short confirmation line for the required pack. After approval,
+7. Show one short approval line for the required pack. Ask the user to type
+   `INSTALL RUNTIME SKILLS` if the required runtime skills are not already
+   installed. Do not use plain `confirm` for runtime installation. After that
+   exact approval phrase, and only if needed,
    install each required runtime skill with manifest parameters:
    - `skill_install(name="clawhouse-ledger-reporting", url="<manifest.skills[].url>")`
    - `skill_install(name="near-intents-spot-value", url="<manifest.skills[].url>")`
@@ -207,7 +210,8 @@ Always require user confirmation for:
     treat it as draft/profile confirmation only. The next assistant message
     must be only the fixed status template in Confirmation Semantics. Do not add
     a heading, summary, strategy recap, runtime recap, blocker list, Markdown
-    checklist, or extra prose.
+    checklist, or extra prose. Do not call any tool before or during this
+    response.
 13. After plain draft confirmation, never output "Agent Activated", "activated",
     or `status: active` as the current state. The required wording is
     "Draft confirmed. Trading activation is still blocked."
@@ -219,13 +223,22 @@ Always require user confirmation for:
 
 Use these meanings:
 
-- `confirm` after a narrowed strategy: confirm the draft strategy and continue
-  runtime setup.
+- `confirm` after a narrowed strategy: confirm the draft strategy/profile only.
 - `confirm` after runtime setup: confirm the draft profile only.
 - `confirm`, `yes`, `approved`, `looks good`, and similar approvals never mean
-  trading activation.
+  trading activation, runtime installation, tool installation, portfolio scan,
+  memory read/write, or setup continuation.
+- `INSTALL RUNTIME SKILLS` is the only approval phrase for installing missing
+  ClawHouse runtime skills.
 - `ACTIVATE TRADING` is the only activation request phrase. Even that phrase can
   activate only when every activation blocker is cleared.
+
+Plain confirmation is a text-only response. When the user sends `confirm`,
+`yes`, `approved`, `looks good`, or similar approval language and blockers
+remain, do not call any tool. This includes no `memory_write`, `memory_read`,
+`tool_info`, `tool_list`, `tool_install`, `portfolio`, `skill_install`,
+heartbeat setup, filesystem write, or network call. Do not ask for tool
+approval. Do not discover or install optional tools.
 
 After draft confirmation, output exactly one compact status. The response must
 contain only these five lines, with filled values:
