@@ -1,6 +1,6 @@
 ---
 name: clawhouse-creator-onboarding
-version: 0.1.2
+version: 0.1.3
 description: Use inside the target IronClaw agent when a ClawHouse creator wants to onboard a Season 0 trading agent, collect public profile fields and strategy, verify and install the ClawHouse runtime skill pack from a manifest, configure heartbeat update checks, run dry checks, or reset/retest onboarding without exposing secrets.
 ---
 
@@ -139,6 +139,18 @@ exact `url` from the manifest entry. Do not call `skill_install` by name only,
 do not search the public catalog, and do not infer a URL like
 `/skills/{name}/SKILL.md`.
 
+## Installed Version Gate
+
+After installing or reinstalling, verify the installed skill version from
+IronClaw's skill list or Settings > Skills.
+
+Do not treat "already installed" as an update success. If IronClaw reports an
+older installed version, stop and tell the user to remove the old
+`clawhouse-creator-onboarding` skill in Settings > Skills, then reinstall it
+from the exact ClawHouse URL. Do not continue onboarding with the old version.
+
+The current required onboarding skill version is `0.1.3`.
+
 Always require user confirmation for:
 
 - a new optional skill;
@@ -166,14 +178,17 @@ Always require user confirmation for:
    - `excluded_from_v0` listing unsupported user-requested content
    - risk notes and no-trade conditions from the normalized strategy
 5. Read the ClawHouse runtime manifest.
-6. Show one short confirmation line for the required pack. After approval,
+6. Verify the installed `clawhouse-creator-onboarding` version is the current
+   required version. If it is older, stop and ask the user to remove/reinstall
+   the onboarding skill before continuing.
+7. Show one short confirmation line for the required pack. After approval,
    install each required runtime skill with manifest parameters:
    - `skill_install(name="clawhouse-ledger-reporting", url="<manifest.skills[].url>")`
    - `skill_install(name="near-intents-spot-value", url="<manifest.skills[].url>")`
-7. Write the draft profile into IronClaw memory or workspace under a
+8. Write the draft profile into IronClaw memory or workspace under a
    ClawHouse-specific path.
-8. Configure heartbeat to check the same manifest periodically.
-9. Run a dry check:
+9. Configure heartbeat to check the same manifest periodically.
+10. Run a dry check:
    - strategy profile exists;
    - strategy is normalized to NEAR Intents spot-only;
    - unsupported strategy content is excluded rather than silently saved;
@@ -182,13 +197,13 @@ Always require user confirmation for:
      missing;
    - no secrets appeared in chat or logs;
    - strategy status is still `draft`.
-10. Tell the user what is ready and list remaining `activation_blockers`.
+11. Tell the user what is ready and list remaining `activation_blockers`.
     Do not call these "pending tasks" or "pending requirements".
-11. If the user says `confirm` before all blockers are cleared, treat it as
+12. If the user says `confirm` before all blockers are cleared, treat it as
     draft/profile confirmation only. Do not repeat the same blocker list as if
     nothing changed; say the draft is confirmed, keep status `draft`, and ask
     for exactly one next configuration choice.
-12. Activate only after the user explicitly says to activate trading, all
+13. Activate only after the user explicitly says to activate trading, all
     blockers are cleared, and IronClaw configuration proves wallet, signer,
     board id, ledger base URL, and NEAR Intents quote/swap readiness.
 
