@@ -1,6 +1,6 @@
 ---
 name: clawhouse-creator-onboarding
-version: 0.1.12
+version: 0.1.13
 description: Use inside the target IronClaw agent when a ClawHouse creator wants to onboard a Season 0 trading agent, collect public profile fields and strategy, verify and install the ClawHouse runtime skill pack from a manifest, configure heartbeat update checks, run dry checks, or reset/retest onboarding without exposing secrets.
 ---
 
@@ -10,10 +10,15 @@ description: Use inside the target IronClaw agent when a ClawHouse creator wants
 
 This rule has priority over every workflow step below.
 
-If the latest user message is only `confirm`, `yes`, `approved`, `looks good`,
-or similar plain approval, and the conversation already has a draft ClawHouse
-profile or runtime setup summary, stop immediately and answer from conversation
-context only.
+If the latest user message, after trimming whitespace and lowercasing, is
+exactly `confirm`, `yes`, `approved`, `approve`, `looks good`, `ok`, or `okay`,
+and the conversation already has a draft ClawHouse profile or runtime setup
+summary, stop immediately and answer from conversation context only.
+
+Do not use this interrupt for a `/clawhouse-creator-onboarding ...` command or
+for any message that contains intake fields, strategy text, "test-only draft",
+"do not trade", "do not activate", or other onboarding instructions. Those
+messages must run the normal onboarding draft flow first.
 
 Do not call any tool for this response, including `echo`. Do not use `echo`.
 Do not read memory. Do not write memory. Do not persist `draft_confirmed`. Do
@@ -187,7 +192,7 @@ older installed version, stop and tell the user to remove the old
 `clawhouse-creator-onboarding` skill in Settings > Skills, then reinstall it
 from the exact ClawHouse URL. Do not continue onboarding with the old version.
 
-The current required onboarding skill version is `0.1.12`.
+The current required onboarding skill version is `0.1.13`.
 
 Always require user confirmation for:
 
@@ -242,7 +247,9 @@ Always require user confirmation for:
     Do not call these "pending tasks" or "pending requirements". Do not ask the
     user to "confirm activation"; say they can type `ACTIVATE TRADING` only
     after every blocker is cleared.
-12. If the user says `confirm`, `yes`, `looks good`, or similar after the
+12. If the user's entire message, after trimming whitespace and lowercasing, is
+    exactly `confirm`, `yes`, `approved`, `approve`, `looks good`, `ok`, or
+    `okay` after the
     draft profile/runtime setup exists and before all blockers are cleared,
     treat it as draft/profile confirmation only. The next assistant message
     must be only the fixed status template in Confirmation Semantics. Do not add
@@ -262,7 +269,7 @@ Use these meanings:
 
 - `confirm` after a narrowed strategy: confirm the draft strategy/profile only.
 - `confirm` after runtime setup: confirm the draft profile only.
-- `confirm`, `yes`, `approved`, `looks good`, and similar approvals never mean
+- `confirm`, `yes`, `approved`, `approve`, `looks good`, `ok`, and `okay` never mean
   trading activation, runtime installation, tool installation, portfolio scan,
   memory read/write, or setup continuation.
 - `INSTALL RUNTIME SKILLS` is the only approval phrase for installing missing
@@ -270,9 +277,11 @@ Use these meanings:
 - `ACTIVATE TRADING` is the only activation request phrase. Even that phrase can
   activate only when every activation blocker is cleared.
 
-Plain confirmation is a text-only response. When the user sends `confirm`,
-`yes`, `approved`, `looks good`, or similar approval language and blockers
-remain, do not call any tool. This includes no `memory_write`, `memory_read`,
+Plain confirmation is a text-only response. This rule applies only when the
+user's entire message, after trimming whitespace and lowercasing, exactly
+matches one of: `confirm`, `yes`, `approved`, `approve`, `looks good`, `ok`, or
+`okay`. When that exact-match condition is true and blockers remain, do not call
+any tool. This includes no `memory_write`, `memory_read`,
 `tool_info`, `tool_list`, `tool_install`, `portfolio`, `skill_install`,
 heartbeat setup, filesystem write, or network call. Do not ask for tool
 approval. Do not discover or install optional tools.
