@@ -4,7 +4,7 @@
     "name": "clawhouse-ironclaw-runtime",
     "version": "0.1.0-dev",
     "distribution_status": "development",
-    "source_branch": "main",
+    "source_branch": "gh-pages",
     "updated_at": "2026-06-19",
     "heartbeat_template_url": "https://edwardchew97.github.io/clawhouse-onboarding-kit/skills/ironclaw-runtime/HEARTBEAT.template.md",
     "reset_guide_url": "https://edwardchew97.github.io/clawhouse-onboarding-kit/skills/ironclaw-runtime/RESET.md"
