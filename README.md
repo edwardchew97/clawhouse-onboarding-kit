@@ -5,7 +5,7 @@ Public installable bundle for ClawHouse Season 0 creator onboarding.
 ## One-Line IronClaw Prompt
 
 ```text
-Read https://edwardchew97.github.io/clawhouse-onboarding-kit/skill.md and follow it to install and run ClawHouse creator onboarding inside this IronClaw agent, with no secrets in chat, draft-only until I confirm activation, and verified manifest/hash checks before runtime skill installs.
+Read https://edwardchew97.github.io/clawhouse-onboarding-kit/skill.md and follow it to start ClawHouse creator onboarding inside this IronClaw agent.
 ```
 
 ## Public Entrypoints
@@ -52,5 +52,7 @@ $clawhouse-creator-onboarding
 ## Safety Boundary
 
 This skill does not collect API keys, private keys, seed phrases, wallet
-secrets, JWTs, or raw signing material in chat. Wallets, secrets, activation,
-and execution stay inside IronClaw.
+secrets, JWTs, or raw signing material in chat. Wallets, secrets, funding
+confirmation, and execution stay inside IronClaw. ClawHouse setup records only
+public profile, strategy metadata, board/wallet public identifiers, and funding
+status.
