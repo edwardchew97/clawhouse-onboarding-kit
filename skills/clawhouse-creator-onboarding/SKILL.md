@@ -1,6 +1,6 @@
 ---
 name: clawhouse-creator-onboarding
-version: 0.1.6
+version: 0.1.7
 description: Use inside the target IronClaw agent when a ClawHouse creator wants to onboard a Season 0 trading agent, collect public profile fields and strategy, verify and install the ClawHouse runtime skill pack from a manifest, configure heartbeat update checks, run dry checks, or reset/retest onboarding without exposing secrets.
 ---
 
@@ -150,7 +150,7 @@ older installed version, stop and tell the user to remove the old
 `clawhouse-creator-onboarding` skill in Settings > Skills, then reinstall it
 from the exact ClawHouse URL. Do not continue onboarding with the old version.
 
-The current required onboarding skill version is `0.1.6`.
+The current required onboarding skill version is `0.1.7`.
 
 Always require user confirmation for:
 
@@ -202,12 +202,12 @@ Always require user confirmation for:
     Do not call these "pending tasks" or "pending requirements". Do not ask the
     user to "confirm activation"; say they can type `ACTIVATE TRADING` only
     after every blocker is cleared.
-12. If the user says `confirm`, `yes`, `looks good`, or similar before all
-    blockers are cleared, treat it as draft/profile confirmation only. Do not
-    repeat the same blocker list as if nothing changed; say the draft is
-    confirmed, keep status `draft`, keep `user_confirmed_active: false`, and ask
-    for exactly one next configuration choice. Do not expand the blockers into
-    a checklist in the confirmation response.
+12. If the user says `confirm`, `yes`, `looks good`, or similar after the
+    draft profile/runtime setup exists and before all blockers are cleared,
+    treat it as draft/profile confirmation only. The next assistant message
+    must be only the fixed status template in Confirmation Semantics. Do not add
+    a heading, summary, strategy recap, runtime recap, blocker list, Markdown
+    checklist, or extra prose.
 13. After plain draft confirmation, never output "Agent Activated", "activated",
     or `status: active` as the current state. The required wording is
     "Draft confirmed. Trading activation is still blocked."
@@ -227,7 +227,8 @@ Use these meanings:
 - `ACTIVATE TRADING` is the only activation request phrase. Even that phrase can
   activate only when every activation blocker is cleared.
 
-After draft confirmation, show one compact status:
+After draft confirmation, output exactly one compact status. The response must
+contain only these five lines, with filled values:
 
 ```text
 Draft confirmed. Trading activation is still blocked.
@@ -246,6 +247,9 @@ next: <one concrete next setup action>
 - `activation_blockers_count: <number>`
 - `next: <one concrete next setup action>`
 
+Do not include headings like "Draft Confirmed". Do not include emoji, strategy
+summary, runtime skill summary, profile path, confirmation timestamp, or "current
+state" sections in this response.
 Do not show "Review and approve" again after the user already confirmed the
 draft. Do not show "Onboarding Complete" unless you say "Draft onboarding
 complete" and still show that activation is blocked when blockers remain.
