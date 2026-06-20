@@ -1,6 +1,6 @@
 ---
 name: clawhouse-creator-onboarding
-version: 0.1.3
+version: 0.1.4
 description: Use inside the target IronClaw agent when a ClawHouse creator wants to onboard a Season 0 trading agent, collect public profile fields and strategy, verify and install the ClawHouse runtime skill pack from a manifest, configure heartbeat update checks, run dry checks, or reset/retest onboarding without exposing secrets.
 ---
 
@@ -43,8 +43,8 @@ Default public ClawHouse runtime manifest:
   permission declaration before installation.
 - Install or guide installation of required runtime skills.
 - Configure heartbeat checks for ClawHouse runtime updates.
-- Run a dry check and keep the strategy inactive until the user confirms inside
-  IronClaw.
+- Run a dry check and keep the strategy inactive until the user explicitly types
+  `ACTIVATE TRADING` inside IronClaw after every blocker is cleared.
 
 ## What This Skill Does Not Own
 
@@ -84,7 +84,8 @@ Allowed V0 strategy content:
 
 - NEAR Intents / 1Click spot swaps only.
 - Long-only spot allocation, rotation, and rebalancing among supported assets.
-- Quote or dry-run first; no execution until the user activates inside IronClaw.
+- Quote or dry-run first; no execution until the user types `ACTIVATE TRADING`
+  inside IronClaw after every blocker is cleared.
 
 Unsupported V0 strategy content:
 
@@ -149,7 +150,7 @@ older installed version, stop and tell the user to remove the old
 `clawhouse-creator-onboarding` skill in Settings > Skills, then reinstall it
 from the exact ClawHouse URL. Do not continue onboarding with the old version.
 
-The current required onboarding skill version is `0.1.3`.
+The current required onboarding skill version is `0.1.4`.
 
 Always require user confirmation for:
 
@@ -198,14 +199,20 @@ Always require user confirmation for:
    - no secrets appeared in chat or logs;
    - strategy status is still `draft`.
 11. Tell the user what is ready and list remaining `activation_blockers`.
-    Do not call these "pending tasks" or "pending requirements".
-12. If the user says `confirm` before all blockers are cleared, treat it as
-    draft/profile confirmation only. Do not repeat the same blocker list as if
-    nothing changed; say the draft is confirmed, keep status `draft`, and ask
+    Do not call these "pending tasks" or "pending requirements". Do not ask the
+    user to "confirm activation"; say they can type `ACTIVATE TRADING` only
+    after every blocker is cleared.
+12. If the user says `confirm`, `yes`, `looks good`, or similar before all
+    blockers are cleared, treat it as draft/profile confirmation only. Do not
+    repeat the same blocker list as if nothing changed; say the draft is
+    confirmed, keep status `draft`, keep `user_confirmed_active: false`, and ask
     for exactly one next configuration choice.
-13. Activate only after the user explicitly says to activate trading, all
-    blockers are cleared, and IronClaw configuration proves wallet, signer,
-    board id, ledger base URL, and NEAR Intents quote/swap readiness.
+13. After plain draft confirmation, never output "Agent Activated", "activated",
+    or `status: active` as the current state. The required wording is
+    "Draft confirmed. Trading activation is still blocked."
+14. Activate only after the exact phrase `ACTIVATE TRADING`, all blockers are
+    cleared, and IronClaw configuration proves wallet, signer, board id, ledger
+    base URL, and NEAR Intents quote/swap readiness.
 
 ## Confirmation Semantics
 
@@ -214,13 +221,16 @@ Use these meanings:
 - `confirm` after a narrowed strategy: confirm the draft strategy and continue
   runtime setup.
 - `confirm` after runtime setup: confirm the draft profile only.
-- `confirm` never means production activation while blockers remain.
-- `activate trading`, `make active`, or an equivalent explicit activation
-  command can mean activation only when every activation blocker is cleared.
+- `confirm`, `yes`, `approved`, `looks good`, and similar approvals never mean
+  trading activation.
+- `ACTIVATE TRADING` is the only activation request phrase. Even that phrase can
+  activate only when every activation blocker is cleared.
 
 After draft confirmation, show one compact status:
 
 - `draft_confirmed: true`
+- `user_confirmed_active: false`
+- `status: draft`
 - `strategy_scope: near-intents-spot-only`
 - `runtime_skills: installed` or the exact missing skill
 - `activation_blockers: [...]`
@@ -229,6 +239,8 @@ After draft confirmation, show one compact status:
 Do not show "Review and approve" again after the user already confirmed the
 draft. Do not show "Onboarding Complete" unless you say "Draft onboarding
 complete" and still show that activation is blocked when blockers remain.
+Do not show "Agent Activated" unless the user typed `ACTIVATE TRADING` and every
+activation blocker was already cleared.
 
 ## Draft Profile Shape
 
