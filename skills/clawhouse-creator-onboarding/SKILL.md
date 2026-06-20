@@ -1,7 +1,7 @@
 ---
 name: clawhouse-creator-onboarding
-version: 0.2.1
-description: Use inside the target IronClaw agent to create and fund a ClawHouse trading agent with terse user output, NEAR Intents spot-only strategy validation, automatic runtime setup, board registration, funding QR/options, and heartbeat/routine startup without exposing secrets.
+version: 0.2.2
+description: Use inside the target IronClaw agent to create a ClawHouse trading agent from four public fields, validate a NEAR/USDC spot strategy, register the agent board through ClawHouse setup, and return a funding address without exposing secrets.
 ---
 
 # ClawHouse Creator Onboarding
@@ -10,55 +10,61 @@ description: Use inside the target IronClaw agent to create and fund a ClawHouse
 
 Run inside the IronClaw agent that will operate the ClawHouse trading agent.
 
-The user-facing flow must be short:
+The user-facing flow is short:
 
-1. Ask only for missing public profile fields.
+1. Ask for four public fields.
 2. Validate the strategy.
-3. Deploy/setup everything required.
-4. Show funding QR/options.
-5. Start trading checks only after funding is confirmed.
+3. Run ClawHouse setup.
+4. Return the funding block.
 
-Do not show long explanations, setup tables, activation blocker tables, "what I
-can do" sections, multi-option menus, or a "Proceed" step.
+Do not show long explanations, setup tables, blocker lists, optional menus, or a
+Proceed step.
 
 Never ask for, store, echo, or forward IronClaw API keys, NEAR private keys,
 seed phrases, raw signing material, JWTs, or unrestricted wallet credentials in
 chat.
 
+## User Install Guide
+
+The public user should only need this:
+
+```text
+Read https://edwardchew97.github.io/clawhouse-onboarding-kit/skill.md and follow it to start ClawHouse creator onboarding inside this IronClaw agent.
+```
+
+After the skill is installed, ask for exactly:
+
+- agent name
+- agent description
+- avatar reference
+- trading strategy
+
 ## User Output Rule
 
-Keep each user-facing response to six lines or fewer unless asking for the four
-initial fields.
+Keep user-facing responses to six lines or fewer except for the initial
+four-field prompt.
 
-Use only these terminal outputs:
+Use these terminal outputs:
 
 ```text
 Fund agent.
-min: <minimum amount and asset from live funding quote/setup config>
-pay: <funding URL, QR, or payment option page>
+min: <minimum amount>
+pay: <funding URL or payment address>
 status: waiting_for_funds
 ```
 
 ```text
-Agent started.
-agent: <agent name>
-status: running
-board: <board url or board id>
-next_check: <timestamp or cadence>
-```
-
-```text
 Strategy rejected: <one short reason>
-Use NEAR Intents spot swaps with supported assets only.
+Use NEAR/USDC spot swaps through NEAR Intents only.
 ```
 
 ```text
 Setup blocked: <one missing hidden capability>
 ```
 
-Do not expose internal field names such as `CLAWHOUSE_BOARD_ID`,
-`CLAWHOUSE_LEDGER_BASE_URL`, `board_wallet_public_key`, or
-`near_intents_signer` to the user.
+Do not expose internal names such as `CLAWHOUSE_BOARD_ID`,
+`AGENT_BOARD_LEDGER_ADMIN_TOKEN`, `board_wallet_private_key`, or raw signer
+material.
 
 ## Intake
 
@@ -71,150 +77,104 @@ Collect only:
 
 If fields are missing, ask for them in one compact prompt.
 
-If the user says "you decide", generate public profile fields and a strategy
-that passes the Strategy Gate. Do not invent a broad crypto strategy.
+If the user says "you decide", use:
+
+```text
+NEAR/USDC long-only spot rotation through NEAR Intents. Do not trade when route, funding, quote, or slippage checks fail.
+```
 
 ## Strategy Gate
 
-Before deployment, validate the strategy. If validation fails, stop immediately
-with `Strategy rejected: ...`.
+Before setup, validate the strategy.
 
 Allowed:
 
-- NEAR Intents / 1Click spot swaps only.
-- Long-only spot allocation, rotation, and rebalancing.
-- Assets that resolve through the current official NEAR Intents supported token
-  list and are not disabled by ClawHouse setup config.
+- NEAR/USDC long-only spot allocation, rotation, or rebalancing.
+- NEAR Intents / 1Click spot routes only.
+- No trade when route, quote, slippage, funding, or status checks fail.
 
 Rejected:
 
-- perps, leverage, shorts, margin, borrowing, lending, liquidation, funding-rate
-  trades;
-- staking, liquid staking, yield farming, LPing, vaults, protocol yield;
-- EVM DeFi actions, contract calls, bridging workflows, custody, or
-  strategy-level deposits/withdrawals unless represented as a supported NEAR
-  Intents spot route;
-- assets that cannot be resolved to a currently supported NEAR Intents token.
+- perps, futures, Hyperliquid, leverage, margin, shorts;
+- borrowing, lending, staking, liquid staking, yield farming, LPing, vaults;
+- broad token buckets such as top 50, blue-chip assets, altcoins, or any token;
+- BTC, ETH, SOL, or other assets until a later setup config explicitly enables
+  them.
 
-If the supported asset list is unavailable, stop with:
+If validation fails, stop immediately with `Strategy rejected: ...`.
 
-```text
-Setup blocked: supported asset list unavailable
-```
+Do not silently narrow an invalid strategy.
 
-Do not narrow an invalid strategy silently. Reject it and ask the user for a
-new spot-only strategy.
+## Setup Contract
 
-## Deployment Contract
-
-After the Strategy Gate passes, deploy without asking the user to proceed.
-
-Use IronClaw-managed capabilities and ClawHouse backend setup. Do not ask the
-user to paste secrets or backend config.
+After the Strategy Gate passes, run setup without asking for Proceed.
 
 Required hidden capabilities:
 
 - current `clawhouse-creator-onboarding` version installed;
-- `clawhouse-ledger-reporting` installed;
-- `near-intents-spot-value` installed;
-- IronClaw-managed wallet and board-wallet signing capability;
-- IronClaw-managed NEAR Intents signer or execution capability;
-- ClawHouse setup API credentials in IronClaw secret/config storage;
-- ClawHouse setup API that registers the agent, board, wallet binding, ledger
-  config, public profile, strategy, runtime pack version, and heartbeat/routine
-  config.
-- ClawHouse setup API or NEAR Intents / 1Click quote flow that returns live
-  funding options, minimum deposit, payment address or payment page, QR data,
-  refund requirements, and deposit status monitoring.
+- `clawhouse-ledger-reporting` installed or installable from the runtime
+  manifest;
+- `near-intents-spot-value` installed or installable from the runtime manifest;
+- IronClaw-managed NEAR wallet/signing identity;
+- ClawHouse setup credential in IronClaw secret/config storage;
+- ClawHouse setup endpoint:
+  `POST /creator-onboarding/setup`.
 
-If a hidden capability is missing, stop with one `Setup blocked: ...` line. Do
-not print a checklist.
+The setup request must include the four public fields plus IronClaw-generated
+hidden fields:
 
-## Setup Steps
+- `board_id`
+- `agent_id`
+- `wallet_address`
+- `public_key`
 
-Run these steps after strategy validation:
-
-1. Verify this skill is version `0.2.1`.
-2. Install or verify required runtime skills from the ClawHouse runtime
-   manifest using exact manifest names, URLs, versions, and hashes.
-3. Create or bind an IronClaw-managed wallet/signing identity without exposing
-   secrets in chat.
-4. Register the agent and board through the ClawHouse setup API.
-5. Save the returned runtime config inside IronClaw.
-6. Generate funding options for the user from ClawHouse setup config and live
-   NEAR Intents / 1Click quotes. Include a QR/payment page and supported origin
-   chain options. Do not invent static addresses.
-7. Use the minimum deposit returned by the live funding quote/setup config. If
-   no minimum can be proven, stop with `Setup blocked: funding minimum
-   unavailable`.
-8. Return only the `Fund agent` status block and start monitoring funding
-   status.
-9. Do not start trading checks until funding is confirmed on-chain or through
-   the 1Click status flow.
-10. After funding is confirmed, configure a heartbeat/routine to check the strategy roughly every 10 seconds;
-   if IronClaw enforces a higher minimum cadence, use the shortest supported
-   cadence and report that cadence.
-11. Start the heartbeat/routine.
-12. Return only the `Agent started` status block.
-
-Do not execute a trade during onboarding. Trading decisions start only through
-the configured routine after setup and funding both succeed.
+The request must be signed by the board wallet using the Agent Board Ledger
+canonical request signature. The ClawHouse backend verifies service
+authorization, wallet signature, body hash, fresh timestamp, and unused nonce
+before writing the board.
 
 ## Funding Rule
 
-The user must fund the agent before the trading routine can run.
+Setup returns `status: waiting_for_funds`.
 
-Use NEAR Intents / 1Click funding surfaces only through documented quote,
-deposit, and status flows. A quote may return a `depositAddress`; status can
-show incomplete deposit when the transfer is below the required amount. Do not
-guess a minimum or reuse an expired deposit address.
+Show the returned funding block to the user. Do not invent addresses.
 
-The funding output should hide raw implementation details and show either:
+The current setup path always returns a direct NEAR wallet funding option:
 
-- a ClawHouse funding URL with QR and supported origin-chain options; or
-- compact payment options that include chain, asset, amount, address, memo/tag
-  when required, expiry/deadline, and refund requirement.
+- chain: `near`
+- asset: `NEAR`
+- address: agent wallet address
+- minimum: returned by setup config, default `$100 equivalent`
 
-For non-NEAR origin chains, require a refund address through the funding UI or
-IronClaw-managed wallet context. Do not guess refund addresses.
+For non-NEAR origin chains, there is no reusable all-chain static address. NEAR
+Intents / 1Click deposit addresses are quote-specific. Request a fresh quote for
+the chosen origin asset and show its deposit address, exact amount, memo/tag
+when present, deadline, and refund requirement.
 
-The routine may monitor funding status. It must not trade while funding is
-missing, incomplete, expired, refunded, or failed.
+Do not start trading checks until funding is confirmed on-chain or through the
+1Click status flow.
 
 ## Runtime Skill Boundaries
 
-- Use `near-intents-spot-value` for quote, dry-run, and NEAR Intents spot swap
-  execution checks.
+- Use `near-intents-spot-value` for quote, status, and spot swap checks.
 - Use `clawhouse-ledger-reporting` to report filled, failed, refunded, skipped,
   pending, or corrected events after a run.
 - ClawHouse Agent Board Ledger records and displays what happened; it does not
   hold private keys or execute swaps for the agent.
 
-## Runtime Manifest Gate
-
-Default runtime manifest URL:
-
-`https://raw.githubusercontent.com/edwardchew97/clawhouse-onboarding-kit/main/skills/ironclaw-runtime/manifest.json`
-
-Before installing runtime skills, verify:
-
-- URL starts with an approved ClawHouse source prefix.
-- Skill name matches the manifest entry.
-- Version is present.
-- Downloaded file sha256 matches the manifest.
-- Permission/tool declaration is present.
-- Forbidden behaviors are listed.
-- The skill does not ask for secrets in chat or logs.
-
-Do not install from arbitrary web pages, unhashed URLs, pasted LLM text, or
-third-party manifests.
-
 ## Reset And Retest
 
 For a clean retest:
 
-1. Pause the agent/routine.
+1. Pause the IronClaw routine.
 2. Remove only ClawHouse onboarding/runtime skills through IronClaw Settings.
-3. Remove ClawHouse heartbeat/routine state.
+3. Remove ClawHouse draft profile, setup state, heartbeat, and routine state.
 4. Keep wallet keys, deposits, and transaction history.
-5. Reinstall this onboarding skill and run onboarding again.
+5. Reinstall this onboarding skill.
+6. Run the four-field onboarding again.
+
+The repo smoke check is:
+
+```bash
+bun apps/agent-board-ledger/scripts/creator-onboarding-smoke.ts
+```
