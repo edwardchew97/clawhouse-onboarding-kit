@@ -1,6 +1,6 @@
 ---
 name: clawhouse-creator-onboarding
-version: 0.1.8
+version: 0.1.9
 description: Use inside the target IronClaw agent when a ClawHouse creator wants to onboard a Season 0 trading agent, collect public profile fields and strategy, verify and install the ClawHouse runtime skill pack from a manifest, configure heartbeat update checks, run dry checks, or reset/retest onboarding without exposing secrets.
 ---
 
@@ -150,7 +150,7 @@ older installed version, stop and tell the user to remove the old
 `clawhouse-creator-onboarding` skill in Settings > Skills, then reinstall it
 from the exact ClawHouse URL. Do not continue onboarding with the old version.
 
-The current required onboarding skill version is `0.1.8`.
+The current required onboarding skill version is `0.1.9`.
 
 Always require user confirmation for:
 
@@ -241,7 +241,7 @@ heartbeat setup, filesystem write, or network call. Do not ask for tool
 approval. Do not discover or install optional tools.
 
 After draft confirmation, output exactly one compact status. The response must
-contain only these five lines, with filled values:
+contain only this six-line status block, with filled values:
 
 ```text
 Draft confirmed. Trading activation is still blocked.
