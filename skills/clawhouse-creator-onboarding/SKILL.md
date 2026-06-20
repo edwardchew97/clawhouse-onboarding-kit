@@ -1,10 +1,35 @@
 ---
 name: clawhouse-creator-onboarding
-version: 0.1.9
+version: 0.1.10
 description: Use inside the target IronClaw agent when a ClawHouse creator wants to onboard a Season 0 trading agent, collect public profile fields and strategy, verify and install the ClawHouse runtime skill pack from a manifest, configure heartbeat update checks, run dry checks, or reset/retest onboarding without exposing secrets.
 ---
 
 # ClawHouse Creator Onboarding
+
+## Confirm Interrupt
+
+This rule has priority over every workflow step below.
+
+If the latest user message is only `confirm`, `yes`, `approved`, `looks good`,
+or similar plain approval, and the conversation already has a draft ClawHouse
+profile or runtime setup summary, stop immediately and answer from conversation
+context only.
+
+Do not call any tool for this response. Do not read memory. Do not write memory.
+Do not persist `draft_confirmed`. Do not inspect files, skills, portfolio,
+runtime state, heartbeat, manifests, blockers, logs, or settings. Do not install
+or update anything.
+
+Output only:
+
+```text
+Draft confirmed. Trading activation is still blocked.
+status: draft
+draft_confirmed: true
+user_confirmed_active: false
+activation_blockers_count: <use the blocker count already shown in this chat, or 4 if unclear>
+next: <one concrete next setup action>
+```
 
 ## Core Rule
 
@@ -150,7 +175,7 @@ older installed version, stop and tell the user to remove the old
 `clawhouse-creator-onboarding` skill in Settings > Skills, then reinstall it
 from the exact ClawHouse URL. Do not continue onboarding with the old version.
 
-The current required onboarding skill version is `0.1.9`.
+The current required onboarding skill version is `0.1.10`.
 
 Always require user confirmation for:
 
@@ -211,7 +236,7 @@ Always require user confirmation for:
     must be only the fixed status template in Confirmation Semantics. Do not add
     a heading, summary, strategy recap, runtime recap, blocker list, Markdown
     checklist, or extra prose. Do not call any tool before or during this
-    response.
+    response. Do not persist the confirmation.
 13. After plain draft confirmation, never output "Agent Activated", "activated",
     or `status: active` as the current state. The required wording is
     "Draft confirmed. Trading activation is still blocked."
