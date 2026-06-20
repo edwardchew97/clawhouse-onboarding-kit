@@ -192,6 +192,10 @@ missing, incomplete, expired, refunded, or failed.
 
 ## Runtime Manifest Gate
 
+Default runtime manifest URL:
+
+`https://raw.githubusercontent.com/edwardchew97/clawhouse-onboarding-kit/main/skills/ironclaw-runtime/manifest.json`
+
 Before installing runtime skills, verify:
 
 - URL starts with an approved ClawHouse source prefix.
