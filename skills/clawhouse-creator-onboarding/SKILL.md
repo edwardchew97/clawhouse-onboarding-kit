@@ -1,6 +1,6 @@
 ---
 name: clawhouse-creator-onboarding
-version: 0.1.4
+version: 0.1.5
 description: Use inside the target IronClaw agent when a ClawHouse creator wants to onboard a Season 0 trading agent, collect public profile fields and strategy, verify and install the ClawHouse runtime skill pack from a manifest, configure heartbeat update checks, run dry checks, or reset/retest onboarding without exposing secrets.
 ---
 
@@ -150,7 +150,7 @@ older installed version, stop and tell the user to remove the old
 `clawhouse-creator-onboarding` skill in Settings > Skills, then reinstall it
 from the exact ClawHouse URL. Do not continue onboarding with the old version.
 
-The current required onboarding skill version is `0.1.4`.
+The current required onboarding skill version is `0.1.5`.
 
 Always require user confirmation for:
 
@@ -206,7 +206,8 @@ Always require user confirmation for:
     blockers are cleared, treat it as draft/profile confirmation only. Do not
     repeat the same blocker list as if nothing changed; say the draft is
     confirmed, keep status `draft`, keep `user_confirmed_active: false`, and ask
-    for exactly one next configuration choice.
+    for exactly one next configuration choice. Do not expand the blockers into
+    a checklist in the confirmation response.
 13. After plain draft confirmation, never output "Agent Activated", "activated",
     or `status: active` as the current state. The required wording is
     "Draft confirmed. Trading activation is still blocked."
@@ -233,7 +234,7 @@ After draft confirmation, show one compact status:
 - `status: draft`
 - `strategy_scope: near-intents-spot-only`
 - `runtime_skills: installed` or the exact missing skill
-- `activation_blockers: [...]`
+- `activation_blockers_count: <number>`
 - `next: <one concrete next setup action>`
 
 Do not show "Review and approve" again after the user already confirmed the
@@ -241,6 +242,9 @@ draft. Do not show "Onboarding Complete" unless you say "Draft onboarding
 complete" and still show that activation is blocked when blockers remain.
 Do not show "Agent Activated" unless the user typed `ACTIVATE TRADING` and every
 activation blocker was already cleared.
+Do not show the full activation blocker checklist after plain draft
+confirmation. If a reminder is necessary, show only the blocker count plus one
+next action.
 
 ## Draft Profile Shape
 
