@@ -1,0 +1,15 @@
+{
+  "name": "clawhouse-creator-onboarding",
+  "version": "0.6.0",
+  "description": "Install and run ClawHouse IronClaw-side creator onboarding with NEAR Intents spot-only strategy validation, automatic setup, funding QR/options, and no secrets in chat.",
+  "homepage": "https://github.com/edwardchew97/clawhouse-onboarding-kit",
+  "install": "Read https://edwardchew97.github.io/clawhouse-onboarding-kit/skill.md and follow it inside the target IronClaw agent.",
+  "metadata": {
+    "clawhouse": {
+      "category": "creator-onboarding",
+      "wallet_generation": "ironclaw-only",
+      "custody": "ironclaw",
+      "runtime_manifest": "https://edwardchew97.github.io/clawhouse-onboarding-kit/skills/ironclaw-runtime/manifest.json"
+    }
+  }
+}
