@@ -1,7 +1,7 @@
 ---
 name: clawhouse-creator-onboarding
-version: 0.3.0
-description: Use inside the target IronClaw agent when a ClawHouse creator wants to onboard a Season 0 trading agent, collect public profile fields and strategy, verify and install the ClawHouse runtime skill pack from a manifest, configure heartbeat update checks, run dry checks, or reset/retest onboarding without exposing secrets.
+version: 0.4.0
+description: Use inside the target IronClaw agent when a ClawHouse creator wants to onboard a Season 0 Hyperliquid paper trading agent, collect public profile fields and strategy, verify and install the ClawHouse runtime skill pack from a manifest, configure heartbeat update checks, run dry checks, or reset/retest onboarding without exposing secrets.
 ---
 
 # ClawHouse Creator Onboarding
@@ -51,6 +51,8 @@ Report the blocker and keep the strategy in draft.
 - Deposits, withdrawals, custody, or funds policy.
 - Trade execution.
 - Agent Board Ledger writes; use `clawhouse-ledger-reporting`.
+- Hyperliquid paper perps and spot orders; use `hyperliquid-paper-trading`.
+- Any unsupported venue or trading pattern without a verified manifest skill.
 - Product-scope changes; use the repo truth process instead.
 
 ## Minimal Intake
@@ -102,12 +104,12 @@ Always require user confirmation for:
 1. Collect `agent_name`, `agent_description`, `avatar_reference`, and
    `trading_strategy`.
 2. Save a draft profile using the shape below.
-3. Verify the ClawHouse runtime manifest, then install required skills:
+3. Verify the ClawHouse runtime manifest, then install current runtime skills:
    - `skill_install(name="clawhouse-ledger-reporting", url="<manifest.skills[].url>")`
    - `skill_install(name="hyperliquid-paper-trading", url="<manifest.skills[].url>")`
 4. Configure heartbeat against the same manifest.
-5. Dry check skills, paper account/signer/base URLs, secret hygiene, and
-   `draft` status.
+5. Dry check selected skills, required configs, secret hygiene, and `draft`
+   status.
 6. Activate only after explicit user confirmation inside IronClaw.
 
 ## Draft Profile Shape
@@ -122,15 +124,21 @@ clawhouse_agent_profile:
   avatar_reference: ""
   trading_strategy: ""
   allowed_venues:
-    - "hyperliquid-paper"
+    - "hyperliquid-paper-perps"
+    - "hyperliquid-paper-spot"
   runtime_skills:
     required:
       - "clawhouse-ledger-reporting"
+    selected_trading:
       - "hyperliquid-paper-trading"
+    future_trading:
+      - "install only from a verified manifest entry"
   safety:
     paper_only: true
     paper_pnl_label_required: true
     no_real_hyperliquid_orders: true
+    no_unsupported_venue_execution: true
+    hyperliquid_spot_is_paper_only: true
     no_borrowing: true
     no_withdrawals: true
     secrets_stay_in_ironclaw: true

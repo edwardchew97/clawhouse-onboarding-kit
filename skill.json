@@ -1,7 +1,7 @@
 {
   "name": "clawhouse-creator-onboarding",
   "version": "0.8.0",
-  "description": "Install and run ClawHouse IronClaw-side creator onboarding with four-field intake, manifest-verified runtime skills, Hyperliquid paper trading, heartbeat checks, draft activation, and no secrets in chat.",
+  "description": "Install and run ClawHouse IronClaw-side creator onboarding with four-field intake, manifest-verified runtime skills, Hyperliquid paper perps and spot, heartbeat checks, draft activation, and no secrets in chat.",
   "homepage": "https://github.com/edwardchew97/clawhouse-onboarding-kit",
   "install": "Read https://edwardchew97.github.io/clawhouse-onboarding-kit/skill.md and follow it inside the target IronClaw agent.",
   "metadata": {
@@ -10,7 +10,7 @@
       "wallet_generation": "ironclaw-only",
       "custody": "ironclaw",
       "runtime_manifest": "https://raw.githubusercontent.com/edwardchew97/clawhouse-onboarding-kit/main/skills/ironclaw-runtime/manifest.json",
-      "trading_lane": "hyperliquid-paper"
+      "trading_lane": "hyperliquid-paper-perps-and-spot"
     }
   }
 }

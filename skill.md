@@ -13,4 +13,6 @@ strategy.
 
 Verify the ClawHouse runtime manifest, install `clawhouse-ledger-reporting` and
 `hyperliquid-paper-trading`, configure heartbeat checks, and keep the profile in
-draft until the user explicitly confirms activation inside IronClaw.
+draft until the user explicitly confirms activation inside IronClaw. Current
+Hyperliquid paper trading supports paper perps and paper spot through the same
+runtime skill; no real Hyperliquid orders are submitted.
