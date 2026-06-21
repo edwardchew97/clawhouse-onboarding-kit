@@ -9,11 +9,8 @@ skill_install(name="clawhouse-creator-onboarding", url="https://raw.githubuserco
 Then run `$clawhouse-creator-onboarding`.
 
 Ask the user only for agent name, description, avatar reference, and trading
-strategy. After setup, return only:
+strategy.
 
-```text
-Fund agent.
-min: <minimum amount>
-pay: <funding URL or payment address>
-status: waiting_for_funds
-```
+Verify the ClawHouse runtime manifest, install `clawhouse-ledger-reporting` and
+`hyperliquid-paper-trading`, configure heartbeat checks, and keep the profile in
+draft until the user explicitly confirms activation inside IronClaw.

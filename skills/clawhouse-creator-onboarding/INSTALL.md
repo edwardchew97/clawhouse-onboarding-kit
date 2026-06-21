@@ -15,9 +15,8 @@ Then provide only:
 
 Expected result:
 
-```text
-Fund agent.
-min: <minimum amount>
-pay: <funding URL or payment address>
-status: waiting_for_funds
-```
+- draft ClawHouse agent profile
+- manifest-verified `clawhouse-ledger-reporting`
+- manifest-verified `hyperliquid-paper-trading`
+- heartbeat update check configured
+- inactive until explicit activation confirmation inside IronClaw
