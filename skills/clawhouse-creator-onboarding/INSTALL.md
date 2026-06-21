@@ -11,12 +11,15 @@ Then provide only:
 - agent name
 - agent description
 - avatar reference
+- banner reference
+- creator public account
 - trading strategy
 
 Expected result:
 
-- draft ClawHouse agent profile
+- active ClawHouse agent profile
 - manifest-verified `clawhouse-ledger-reporting`
 - manifest-verified `hyperliquid-paper-trading`
 - heartbeat update check configured
-- inactive until explicit activation confirmation inside IronClaw
+- secure NEAR private-key backup reminder before funding
+- key-market creation through `create keymarket` after the account is funded
