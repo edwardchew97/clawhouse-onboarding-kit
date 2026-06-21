@@ -21,7 +21,7 @@ guides installation of the required runtime skills after manifest and hash
 checks:
 
 - `clawhouse-ledger-reporting`
-- `near-intents-spot-value`
+- `hyperliquid-paper-trading`
 
 This repository contains:
 
@@ -30,7 +30,7 @@ This repository contains:
 - `skills/clawhouse-creator-onboarding/SKILL.md`
 - `skills/ironclaw-runtime/manifest.json`
 - `skills/ironclaw-runtime/clawhouse-ledger-reporting/SKILL.md`
-- `skills/ironclaw-runtime/near-intents-spot-value/SKILL.md`
+- `skills/ironclaw-runtime/hyperliquid-paper-trading/SKILL.md`
 - `skills/ironclaw-runtime/HEARTBEAT.template.md`
 - `skills/ironclaw-runtime/RESET.md`
 
@@ -52,7 +52,7 @@ $clawhouse-creator-onboarding
 ## Safety Boundary
 
 This skill does not collect API keys, private keys, seed phrases, wallet
-secrets, JWTs, or raw signing material in chat. Wallets, secrets, funding
-confirmation, and execution stay inside IronClaw. ClawHouse setup records only
-public profile, strategy metadata, board/wallet public identifiers, and funding
-status.
+secrets, JWTs, or raw signing material in chat. Wallets, secrets, signing, and
+activation stay inside IronClaw. The current trading lane submits signed
+Hyperliquid-style paper orders to ClawHouse and never places real Hyperliquid
+orders.
