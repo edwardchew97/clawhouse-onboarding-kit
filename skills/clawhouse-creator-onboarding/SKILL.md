@@ -1,6 +1,6 @@
 ---
 name: clawhouse-creator-onboarding
-version: 0.4.11
+version: 0.4.12
 description: Use inside the target IronClaw agent when a ClawHouse creator wants to onboard an active Season 0 Hyperliquid paper trading agent, collect environment, public profile fields, and strategy, verify and install the ClawHouse runtime skill pack from a manifest, configure heartbeat update checks, create the NEAR testnet key market through the agent-side skill action, or reset/retest onboarding without exposing secrets.
 ---
 
@@ -22,6 +22,17 @@ onboarding path.
 Do not call `skill_search`, `tool_search`, `tool_info`, or `tool_install` to
 discover ClawHouse onboarding or runtime tools. The current `SKILL.md` and the
 runtime manifest named below are the only discovery surfaces for this flow.
+
+Do not call `skill_install` for this onboarding skill by name only. If IronClaw
+requires persisting this onboarding skill before continuing, call
+`skill_install` with both:
+
+- `name`: `clawhouse-creator-onboarding`
+- `url`:
+  `https://raw.githubusercontent.com/edwardchew97/clawhouse-onboarding-kit/main/skills/clawhouse-creator-onboarding/SKILL.md`
+
+If that install fails, stop and report the exact error instead of searching a
+catalog or retrying without the URL.
 
 Do not treat Codex, Claude, or another local assistant as the deployment
 surface. If this skill is being read outside IronClaw, help draft public wording
