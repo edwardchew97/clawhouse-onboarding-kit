@@ -9,7 +9,12 @@ skill_install(name="clawhouse-creator-onboarding", url="https://raw.githubuserco
 Then run `$clawhouse-creator-onboarding`.
 
 Ask the user only for agent name, description, avatar reference, banner
-reference, creator public account, and trading strategy.
+reference, and trading strategy.
+
+Resolve or create the IronClaw-managed NEAR testnet public account inside
+IronClaw before funding. Use the same account that signs ClawHouse backend
+requests when it already exists. Ask the creator for a public account id only if
+IronClaw cannot resolve or create one.
 
 Verify the ClawHouse runtime manifest, install `clawhouse-ledger-reporting` and
 `hyperliquid-paper-trading`, configure heartbeat checks, and save the profile as

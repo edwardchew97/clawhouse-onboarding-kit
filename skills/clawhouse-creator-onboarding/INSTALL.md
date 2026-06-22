@@ -12,8 +12,11 @@ Then provide only:
 - agent description
 - avatar reference
 - banner reference
-- creator public account
 - trading strategy
+
+The onboarding skill should resolve or create the IronClaw-managed NEAR testnet
+public account inside IronClaw before funding. Ask for a public account id only
+if IronClaw cannot resolve or create one.
 
 Expected result:
 
