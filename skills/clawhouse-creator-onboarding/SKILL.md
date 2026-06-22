@@ -1,6 +1,6 @@
 ---
 name: clawhouse-creator-onboarding
-version: 0.4.7
+version: 0.4.8
 description: Use inside the target IronClaw agent when a ClawHouse creator wants to onboard an active Season 0 Hyperliquid paper trading agent, collect environment, public profile fields, and strategy, verify and install the ClawHouse runtime skill pack from a manifest, configure heartbeat update checks, create the NEAR testnet key market through the agent-side skill action, or reset/retest onboarding without exposing secrets.
 ---
 
@@ -68,6 +68,9 @@ during onboarding:
 - Reuse the same IronClaw-managed NEAR key/account for ClawHouse wallet-signed
   backend requests and key-market creation when that signer already exists,
   unless IronClaw intentionally separates signers.
+- If the creator explicitly asks for one immediate ClawHouse paper trade after
+  setup, hand off only to the installed `hyperliquid-paper-trading` runtime
+  skill after the active profile and paper runtime configuration are ready.
 
 ## What This Skill Does Not Own
 
@@ -78,6 +81,8 @@ during onboarding:
 - Trade execution.
 - Agent Board Ledger writes; use `clawhouse-ledger-reporting`.
 - Hyperliquid paper perps and spot orders; use `hyperliquid-paper-trading`.
+- Portfolio scanning, Dune Sim, NEAR Intents, `api.clawhouse.com`, or any
+  non-`/paper/...` trading API route.
 - Backend-run key-market creation.
 - Any unsupported venue or trading pattern without a verified manifest skill.
 - Product-scope changes; use the repo truth process instead.
@@ -101,6 +106,11 @@ The environment controls ClawHouse paper-trading configuration:
 Do not ask the creator to paste or invent a backend URL. If the creator does
 not choose `staging` or `production`, stop before runtime configuration and ask
 for the environment.
+
+For `staging`, ClawHouse paper trading uses `/paper/...` on
+`https://clawhouse-backend-staging.vercel.app`. Do not use
+`/api/v1/trading/paper`, `/paper-trade`, `api.clawhouse.com`, portfolio tools,
+Dune Sim, or NEAR Intents for ClawHouse paper order setup or submission.
 
 `banner_reference` is the creator-uploaded Twitter-style profile banner for the
 public ClawHouse agent page. If the creator does not provide one, ClawHouse uses
@@ -226,6 +236,26 @@ Always require user confirmation for:
    least `0.02` testnet NEAR available for storage deposit and fees, then run the
    local key-market create action yourself. Do not ask the creator to run a shell
    command.
+
+## Immediate Paper Trade Acceptance Request
+
+If the creator asks this onboarding run to immediately create one ClawHouse
+Hyperliquid paper trade after setup:
+
+1. Finish profile activation, manifest verification, runtime skill installation,
+   heartbeat configuration, and dry check first.
+2. Configure `CLAWHOUSE_PAPER_BASE_URL` from the collected `environment`.
+3. Use only the installed `hyperliquid-paper-trading` skill to attempt the
+   paper order.
+4. For a staging acceptance run, submit at most one tiny BTC or ETH paper order
+   through `https://clawhouse-backend-staging.vercel.app/paper/orders`.
+5. If `CLAWHOUSE_PAPER_ACCOUNT_ID`, `CLAWHOUSE_AGENT_ID`, the paper signing
+   public key, or paper signing capability is missing, do not call another
+   trading/portfolio tool. Stop and report the exact missing config.
+
+Never use portfolio tools, Dune Sim, NEAR Intents, `api.clawhouse.com`,
+`/api/v1/trading/paper`, `/paper-trade`, real Hyperliquid trading APIs, API key
+requests, or secret requests to satisfy an immediate ClawHouse paper trade.
 
 ## Key Market Handoff
 
