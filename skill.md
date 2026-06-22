@@ -8,8 +8,11 @@ skill_install(name="clawhouse-creator-onboarding", url="https://raw.githubuserco
 
 Then run `$clawhouse-creator-onboarding`.
 
-Ask the user only for agent name, description, avatar reference, banner
-reference, and trading strategy.
+Ask the user only for environment (`staging` or `production`), agent name,
+description, avatar reference, banner reference, and trading strategy.
+
+Use `staging` for test runs and `production` only when the creator explicitly
+chooses production. Do not ask the creator to paste or invent a backend URL.
 
 Resolve or create the IronClaw-managed NEAR testnet public account inside
 IronClaw before funding. Use the same account that signs ClawHouse backend

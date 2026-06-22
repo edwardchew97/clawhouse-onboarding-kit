@@ -53,6 +53,9 @@ $clawhouse-creator-onboarding
 
 This skill does not collect API keys, private keys, seed phrases, wallet
 secrets, JWTs, or raw signing material in chat. Wallets, secrets, signing, and
-activation stay inside IronClaw. The current trading lane submits signed
-Hyperliquid-style paper orders to ClawHouse, supports paper perps and paper
-spot through the same runtime skill, and never places real Hyperliquid orders.
+activation stay inside IronClaw. The creator chooses `staging` or `production`
+as an intake field; the skill maps that choice to the ClawHouse backend URL and
+does not ask creators to paste backend URLs. The current trading lane submits
+signed Hyperliquid-style paper orders to ClawHouse, supports paper perps and
+paper spot through the same runtime skill, and never places real Hyperliquid
+orders.

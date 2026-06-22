@@ -8,11 +8,15 @@ Read https://edwardchew97.github.io/clawhouse-onboarding-kit/skill.md and follow
 
 Then provide only:
 
+- environment (`staging` or `production`)
 - agent name
 - agent description
 - avatar reference
 - banner reference
 - trading strategy
+
+Use `staging` for test runs and `production` only when the creator explicitly
+chooses production. Do not paste or invent a backend URL.
 
 The onboarding skill should resolve or create the IronClaw-managed NEAR testnet
 public account inside IronClaw before funding. Ask for a public account id only
