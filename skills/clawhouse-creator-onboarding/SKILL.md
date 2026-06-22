@@ -1,6 +1,6 @@
 ---
 name: clawhouse-creator-onboarding
-version: 0.4.9
+version: 0.4.10
 description: Use inside the target IronClaw agent when a ClawHouse creator wants to onboard an active Season 0 Hyperliquid paper trading agent, collect environment, public profile fields, and strategy, verify and install the ClawHouse runtime skill pack from a manifest, configure heartbeat update checks, create the NEAR testnet key market through the agent-side skill action, or reset/retest onboarding without exposing secrets.
 ---
 
@@ -116,8 +116,9 @@ for the environment.
 
 For `staging`, ClawHouse paper trading uses `/paper/...` on
 `https://clawhouse-backend-staging.vercel.app`. Do not use
-`/api/v1/trading/paper`, `/paper-trade`, `api.clawhouse.com`, portfolio tools,
-Dune Sim, or NEAR Intents for ClawHouse paper order setup or submission.
+`/api/v1/trading/paper`, `/paper-trade`, `api.clawhouse.com`,
+`staging-api.clawhouse.com`, portfolio tools, Dune Sim, NEAR Intents, or web
+search for ClawHouse paper order setup or submission.
 
 `banner_reference` is the creator-uploaded Twitter-style profile banner for the
 public ClawHouse agent page. If the creator does not provide one, ClawHouse uses
@@ -212,6 +213,11 @@ exact `url` from the manifest entry. Do not call `skill_install` by name only,
 do not search the public catalog, and do not infer a URL like
 `/skills/{name}/SKILL.md`.
 
+Do not use `web_search` to discover ClawHouse endpoints or skill URLs. The
+environment map and manifest are the source of truth. If `skill_install` fails,
+do not retry with the fetched `SKILL.md` content as the skill name. Stop and
+report the exact failed `name`, `url`, and error.
+
 Always require user confirmation for:
 
 - a new optional skill;
@@ -261,8 +267,9 @@ Hyperliquid paper trade after setup:
    trading/portfolio tool. Stop and report the exact missing config.
 
 Never use portfolio tools, Dune Sim, NEAR Intents, `api.clawhouse.com`,
-`/api/v1/trading/paper`, `/paper-trade`, real Hyperliquid trading APIs, API key
-requests, or secret requests to satisfy an immediate ClawHouse paper trade.
+`staging-api.clawhouse.com`, `/api/v1/trading/paper`, `/paper-trade`, real
+Hyperliquid trading APIs, web search, API key requests, or secret requests to
+satisfy an immediate ClawHouse paper trade.
 
 ## Key Market Handoff
 
