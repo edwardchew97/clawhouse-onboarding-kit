@@ -1,6 +1,6 @@
 ---
 name: clawhouse-creator-onboarding
-version: 0.4.10
+version: 0.4.11
 description: Use inside the target IronClaw agent when a ClawHouse creator wants to onboard an active Season 0 Hyperliquid paper trading agent, collect environment, public profile fields, and strategy, verify and install the ClawHouse runtime skill pack from a manifest, configure heartbeat update checks, create the NEAR testnet key market through the agent-side skill action, or reset/retest onboarding without exposing secrets.
 ---
 
@@ -18,6 +18,10 @@ If this `SKILL.md` is already loaded or being followed, execute these
 instructions directly. Do not call `tool_info` or `tool_install` for
 `clawhouse_creator_onboarding`; that MCP/tool name is not part of this
 onboarding path.
+
+Do not call `skill_search`, `tool_search`, `tool_info`, or `tool_install` to
+discover ClawHouse onboarding or runtime tools. The current `SKILL.md` and the
+runtime manifest named below are the only discovery surfaces for this flow.
 
 Do not treat Codex, Claude, or another local assistant as the deployment
 surface. If this skill is being read outside IronClaw, help draft public wording
@@ -89,7 +93,8 @@ during onboarding:
 - Portfolio scanning, Dune Sim, NEAR Intents, `api.clawhouse.com`, or any
   non-`/paper/...` trading API route.
 - The legacy or custom MCP/tool path named `clawhouse_creator_onboarding`;
-  do not call `tool_info` or `tool_install` for that name.
+  do not call `skill_search`, `tool_search`, `tool_info`, or `tool_install` for
+  that name.
 - Backend-run key-market creation.
 - Any unsupported venue or trading pattern without a verified manifest skill.
 - Product-scope changes; use the repo truth process instead.
@@ -195,6 +200,10 @@ that public account with `0.02` testnet NEAR before saying `create keymarket`.
 Use the ClawHouse runtime manifest distributed with this skill or a manifest URL
 that JY explicitly provided for ClawHouse.
 
+Do not use `skill_search`, `tool_search`, `tool_info`, or `tool_install` to find
+ClawHouse runtime skills or onboarding tools. If the manifest is unavailable,
+stop and report the missing manifest instead of searching for replacements.
+
 Before installing any runtime skill, verify:
 
 - URL starts with an approved ClawHouse source prefix.
@@ -210,8 +219,8 @@ or third-party manifests.
 
 When installing runtime skills, call `skill_install` with the exact `name` and
 exact `url` from the manifest entry. Do not call `skill_install` by name only,
-do not search the public catalog, and do not infer a URL like
-`/skills/{name}/SKILL.md`.
+do not search the public catalog, do not run `skill_search`, and do not infer a
+URL like `/skills/{name}/SKILL.md`.
 
 Do not use `web_search` to discover ClawHouse endpoints or skill URLs. The
 environment map and manifest are the source of truth. If `skill_install` fails,
@@ -231,6 +240,8 @@ Always require user confirmation for:
 
 1. Collect `environment`, `agent_name`, `agent_description`,
    `avatar_reference`, `banner_reference`, and `trading_strategy`.
+   If the request already states `environment: staging` or
+   `environment: production`, accept that field and do not ask for it again.
 2. Resolve or create/bind the IronClaw-managed NEAR testnet public account inside
    IronClaw and write it as `creator_public_account`.
 3. Configure the paper runtime base URL from `environment`: staging maps to
