@@ -1,6 +1,6 @@
 ---
 name: clawhouse-creator-onboarding
-version: 0.4.19
+version: 0.4.20
 description: Use inside the target IronClaw agent when a ClawHouse creator wants to onboard an active Season 0 Hyperliquid paper trading agent, collect environment, public profile fields, and strategy, verify and install the ClawHouse runtime skill pack from a manifest, configure heartbeat update checks, create the NEAR testnet key market through the agent-side skill action, or reset/retest onboarding without exposing secrets.
 ---
 
@@ -192,8 +192,10 @@ Resolve `creator_public_account` yourself before funding:
 3. If the local helper only returns a public key without a usable NEAR testnet
    account id, stop and report the missing account binding. Do not treat the
    public key as the funded account.
-4. Ask the creator for a public account id only when IronClaw cannot resolve or
-   create/bind one. Present that as a blocker, not as normal intake.
+4. Ask the creator for a public account id only when an approved helper already
+   exists but needs an externally named public account binding. Do not use a
+   public account prompt to bypass missing helper, missing signer, or missing
+   secure local key storage. Present that as a blocker, not as normal intake.
 
 Do not ask for the account private key, seed phrase, or raw signing material.
 
