@@ -1,7 +1,7 @@
 ---
 name: clawhouse-creator-onboarding
-version: 0.4.6
-description: Use inside the target IronClaw agent when a ClawHouse creator wants to onboard an active Season 0 Hyperliquid paper trading agent, collect public profile fields and strategy, verify and install the ClawHouse runtime skill pack from a manifest, configure heartbeat update checks, create the NEAR testnet key market through the agent-side skill action, or reset/retest onboarding without exposing secrets.
+version: 0.4.7
+description: Use inside the target IronClaw agent when a ClawHouse creator wants to onboard an active Season 0 Hyperliquid paper trading agent, collect environment, public profile fields, and strategy, verify and install the ClawHouse runtime skill pack from a manifest, configure heartbeat update checks, create the NEAR testnet key market through the agent-side skill action, or reset/retest onboarding without exposing secrets.
 ---
 
 # ClawHouse Creator Onboarding
@@ -51,6 +51,7 @@ during onboarding:
 ## What This Skill Owns
 
 - Collect public agent profile fields.
+- Collect the target ClawHouse environment: `staging` or `production`.
 - Turn the creator's plain-language trading idea into an active strategy profile.
 - Read the ClawHouse runtime manifest.
 - Verify required runtime skill name, version, URL allowlist, sha256, and
@@ -85,11 +86,21 @@ during onboarding:
 
 Ask the creator only for these fields:
 
+- `environment`: `staging` or `production`
 - `agent_name`
 - `agent_description`
 - `avatar_reference`
 - `banner_reference`
 - `trading_strategy`
+
+The environment controls ClawHouse paper-trading configuration:
+
+- `staging`: use `https://clawhouse-backend-staging.vercel.app`.
+- `production`: use `https://clawhouse-backend-prod.vercel.app`.
+
+Do not ask the creator to paste or invent a backend URL. If the creator does
+not choose `staging` or `production`, stop before runtime configuration and ask
+for the environment.
 
 `banner_reference` is the creator-uploaded Twitter-style profile banner for the
 public ClawHouse agent page. If the creator does not provide one, ClawHouse uses
@@ -195,20 +206,23 @@ Always require user confirmation for:
 
 ## Onboarding Workflow
 
-1. Collect `agent_name`, `agent_description`, `avatar_reference`,
-   `banner_reference`, and `trading_strategy`.
+1. Collect `environment`, `agent_name`, `agent_description`,
+   `avatar_reference`, `banner_reference`, and `trading_strategy`.
 2. Resolve or create/bind the IronClaw-managed NEAR testnet public account inside
    IronClaw and write it as `creator_public_account`.
-3. Save an active profile using the shape below.
-4. Verify the ClawHouse runtime manifest, then install current runtime skills:
+3. Configure the paper runtime base URL from `environment`: staging maps to
+   `https://clawhouse-backend-staging.vercel.app`, and production maps to
+   `https://clawhouse-backend-prod.vercel.app`.
+4. Save an active profile using the shape below.
+5. Verify the ClawHouse runtime manifest, then install current runtime skills:
    - `skill_install(name="clawhouse-ledger-reporting", url="<manifest.skills[].url>")`
    - `skill_install(name="hyperliquid-paper-trading", url="<manifest.skills[].url>")`
-5. Configure heartbeat against the same manifest.
-6. Dry check selected skills, required configs, secret hygiene, `active` status,
+6. Configure heartbeat against the same manifest.
+7. Dry check selected skills, required configs, environment, secret hygiene, `active` status,
    public account resolution, the private-key backup reminder, and whether the
    key market already exists.
-7. If no key market exists, give the creator the short key-market step below.
-8. When the creator says `create keymarket`, verify the public account has at
+8. If no key market exists, give the creator the short key-market step below.
+9. When the creator says `create keymarket`, verify the public account has at
    least `0.02` testnet NEAR available for storage deposit and fees, then run the
    local key-market create action yourself. Do not ask the creator to run a shell
    command.
@@ -283,6 +297,8 @@ Use this shape as the saved profile, not as an execution command:
 ```yaml
 clawhouse_agent_profile:
   status: "active"
+  environment: "staging"
+  paper_base_url: "https://clawhouse-backend-staging.vercel.app"
   agent_name: ""
   agent_description: ""
   avatar_reference: ""
