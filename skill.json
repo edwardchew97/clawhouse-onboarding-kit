@@ -1,7 +1,7 @@
 {
   "name": "clawhouse-creator-onboarding",
-  "version": "0.8.4",
-  "description": "Install and run ClawHouse IronClaw-side creator onboarding with environment, profile, and strategy intake, IronClaw-side NEAR public account resolution, manifest-verified runtime skills, Hyperliquid paper perps and spot, heartbeat checks, active running strategy setup, optional key-market follow-up, secure NEAR key backup reminders, and no secrets in chat.",
+  "version": "0.8.5",
+  "description": "Install and run ClawHouse IronClaw-side creator onboarding: collect environment, profile, and strategy fields; create or reuse the IronClaw-managed NEAR wallet; install verified runtime skills; save the agent as active; start the strategy; and handle the later key-market command without exposing secrets.",
   "homepage": "https://github.com/edwardchew97/clawhouse-onboarding-kit",
   "install": "Read https://edwardchew97.github.io/clawhouse-onboarding-kit/skill.md and follow it inside the target IronClaw agent.",
   "metadata": {
