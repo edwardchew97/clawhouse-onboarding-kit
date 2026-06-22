@@ -1,6 +1,6 @@
 ---
 name: clawhouse-creator-onboarding
-version: 0.4.8
+version: 0.4.9
 description: Use inside the target IronClaw agent when a ClawHouse creator wants to onboard an active Season 0 Hyperliquid paper trading agent, collect environment, public profile fields, and strategy, verify and install the ClawHouse runtime skill pack from a manifest, configure heartbeat update checks, create the NEAR testnet key market through the agent-side skill action, or reset/retest onboarding without exposing secrets.
 ---
 
@@ -12,6 +12,11 @@ Run this onboarding in the IronClaw agent that will actually operate the
 ClawHouse trading agent.
 
 Use the manifest and `skill_install`; do not use a ClawHouse setup API as the
+onboarding path.
+
+If this `SKILL.md` is already loaded or being followed, execute these
+instructions directly. Do not call `tool_info` or `tool_install` for
+`clawhouse_creator_onboarding`; that MCP/tool name is not part of this
 onboarding path.
 
 Do not treat Codex, Claude, or another local assistant as the deployment
@@ -83,6 +88,8 @@ during onboarding:
 - Hyperliquid paper perps and spot orders; use `hyperliquid-paper-trading`.
 - Portfolio scanning, Dune Sim, NEAR Intents, `api.clawhouse.com`, or any
   non-`/paper/...` trading API route.
+- The legacy or custom MCP/tool path named `clawhouse_creator_onboarding`;
+  do not call `tool_info` or `tool_install` for that name.
 - Backend-run key-market creation.
 - Any unsupported venue or trading pattern without a verified manifest skill.
 - Product-scope changes; use the repo truth process instead.
