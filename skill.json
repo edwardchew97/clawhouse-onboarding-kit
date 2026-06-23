@@ -1,20 +1,18 @@
 {
-  "name": "clawhouse-creator-onboarding",
-  "version": "0.8.5",
-  "description": "Install and run ClawHouse IronClaw-side creator onboarding: collect environment, profile, and strategy fields; create or reuse the IronClaw-managed NEAR wallet; install verified runtime skills; save the agent as active; start the strategy; and handle the later key-market command without exposing secrets.",
+  "name": "clawhouse-skill-directory",
+  "version": "0.9.0",
+  "description": "Start ClawHouse onboarding from the Skill Directory, choose the runtime mode, register a paper-trading agent, and optionally create a NEAR testnet key market without exposing private keys.",
   "homepage": "https://github.com/edwardchew97/clawhouse-onboarding-kit",
-  "install": "Read https://edwardchew97.github.io/clawhouse-onboarding-kit/skill.md and follow it inside the target IronClaw agent.",
+  "install": "Read https://edwardchew97.github.io/clawhouse-onboarding-kit/skill.md and install clawhouse-skill-directory inside the target agent runtime.",
   "metadata": {
     "clawhouse": {
-      "category": "creator-onboarding",
-      "wallet_generation": "ironclaw-only",
-      "public_account_resolution": "resolve-or-create-inside-ironclaw",
-      "custody": "ironclaw",
-      "key_reuse": "reuse-ironclaw-managed-near-key-when-available",
-      "private_key_backup": "secure-ironclaw-local-backup-reminder",
-      "environment_choice": "staging-or-production",
-      "runtime_manifest": "https://raw.githubusercontent.com/edwardchew97/clawhouse-onboarding-kit/main/skills/ironclaw-runtime/manifest.json",
-      "trading_lane": "hyperliquid-paper-perps-and-spot"
+      "category": "skill-directory",
+      "entry_skill": "clawhouse-skill-directory",
+      "creator_onboarding_skill": "clawhouse-creator-onboarding",
+      "wallet_generation": "agent-owned-testnet-operation-key",
+      "key_market": "optional",
+      "user_installs_only_skill": true,
+      "runtime_manifest": "https://raw.githubusercontent.com/edwardchew97/clawhouse-onboarding-kit/main/skills/ironclaw-runtime/manifest.json"
     }
   }
 }
