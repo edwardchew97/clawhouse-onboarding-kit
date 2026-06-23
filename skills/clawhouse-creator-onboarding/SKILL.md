@@ -1,6 +1,6 @@
 ---
 name: clawhouse-creator-onboarding
-version: 0.4.41
+version: 0.4.42
 description: "Onboard, set up, or create a ClawHouse Season 0 Hyperliquid paper trading agent. Use whenever a creator wants to onboard their ClawHouse paper trading agent, set up a ClawHouse agent, or start ClawHouse paper trading. Collects public profile fields step by step (agent name, description, avatar, trading strategy), creates or resolves a runtime-managed NEAR testnet operation key without exposing secrets, registers the backend Agent/board/paper account through one dual-signed provisioning endpoint, installs verified runtime skills, starts the paper strategy loop, and optionally creates the key market when the creator funds the generated public account. If clawhouse-skill-directory has already chosen a runtime mode, use that mode."
 activation:
   keywords:
@@ -36,7 +36,8 @@ Use the execution mode chosen by `clawhouse-skill-directory`:
 - `codex-automation`: use only when no Heartbeat System exists and the runtime is
   Codex. Create or reuse an agent-owned NEAR testnet operation key in a local
   plaintext `0600` key file outside the repo, then run the paper strategy
-  through a Codex Automation.
+  through a Codex Automation attached to one dedicated ClawHouse thread by
+  default.
 - `claude-scheduled-task`: use only when no Heartbeat System exists and Claude
   can create a scheduled task with approved private secret storage. Run the paper
   strategy through that scheduled task.
@@ -335,7 +336,13 @@ Pick runtime execution in this order:
    `agent_id`, `board_id`, `paper_account_id`, installed skill versions,
    `trading_strategy`, and loop freshness health check.
 2. If no Heartbeat System exists and the runtime is Codex, create or confirm a
-   Codex Automation named `clawhouse-<agent_id>-paper-loop`.
+   Codex heartbeat Automation named `clawhouse-<agent_id>-paper-loop` with
+   `destination: thread`, attached to one dedicated ClawHouse thread. Reuse the
+   same thread for later runs. Do not create a detached workspace cron
+   automation by default, because that can create a new Chat for every run.
+   Use a detached workspace cron only if the creator explicitly asks for
+   standalone per-run Chat output or the Codex environment cannot support
+   thread heartbeat automations.
 3. If no Heartbeat System exists and the runtime is Claude, create or confirm a
    Claude scheduled task named `clawhouse-<agent_id>-paper-loop`. It must use
    approved private secret storage for operation-key access.
