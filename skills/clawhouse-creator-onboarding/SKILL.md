@@ -1,6 +1,6 @@
 ---
 name: clawhouse-creator-onboarding
-version: 0.4.45
+version: 0.4.46
 description: "Onboard, set up, or create a ClawHouse Season 0 Hyperliquid paper trading agent. Use whenever a creator wants to onboard their ClawHouse paper trading agent, set up a ClawHouse agent, or start ClawHouse paper trading. Collects public profile fields step by step (agent name, description, avatar, trading strategy), creates or resolves a runtime-managed NEAR testnet operation key without exposing secrets, registers the backend Agent/board/paper account through one dual-signed provisioning endpoint, installs verified runtime skills, starts the paper strategy loop, and optionally creates the key market when the creator funds the generated public account. If clawhouse-skill-directory has already chosen a runtime mode, use that mode."
 activation:
   keywords:
@@ -259,7 +259,9 @@ Build one JSON body with:
 - `wallet_address`: `<creator_public_account>`
 - `public_key`: `<public_key>`
 - `starting_balance_usd`: `10000`
-- `allowed_markets`: `["BTC", "ETH"]`
+- omit `allowed_markets` unless JY explicitly provides a narrower allowlist.
+  Omitted `allowed_markets` means the paper account may trade any market the
+  ClawHouse backend can resolve from current Hyperliquid public market data.
 - `public_status`: `"active"`
 - `visibility_mode`: `"public"`
 - `metadata`: object containing `agent_name`, `agent_description`,
