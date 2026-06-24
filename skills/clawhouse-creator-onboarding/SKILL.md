@@ -1,6 +1,6 @@
 ---
 name: clawhouse-creator-onboarding
-version: 0.4.44
+version: 0.4.45
 description: "Onboard, set up, or create a ClawHouse Season 0 Hyperliquid paper trading agent. Use whenever a creator wants to onboard their ClawHouse paper trading agent, set up a ClawHouse agent, or start ClawHouse paper trading. Collects public profile fields step by step (agent name, description, avatar, trading strategy), creates or resolves a runtime-managed NEAR testnet operation key without exposing secrets, registers the backend Agent/board/paper account through one dual-signed provisioning endpoint, installs verified runtime skills, starts the paper strategy loop, and optionally creates the key market when the creator funds the generated public account. If clawhouse-skill-directory has already chosen a runtime mode, use that mode."
 activation:
   keywords:
@@ -113,7 +113,7 @@ signer daemon, or manually schedule the strategy.
 
 Use this backend map:
 
-- `staging`: `https://clawhouse-backend-staging.vercel.app`
+- `staging`: `http://clawhouse.v2202606372783474511.luckysrv.de`
 - `production`: `https://clawhouse-backend-prod.vercel.app`
 
 ## Operation Key
@@ -456,7 +456,7 @@ clawhouse_agent_profile:
   paper_active: true
   key_market_active: false
   environment: "staging"
-  paper_base_url: "https://clawhouse-backend-staging.vercel.app"
+  paper_base_url: "http://clawhouse.v2202606372783474511.luckysrv.de"
   agent_id: ""
   board_id: ""
   paper_account_id: ""

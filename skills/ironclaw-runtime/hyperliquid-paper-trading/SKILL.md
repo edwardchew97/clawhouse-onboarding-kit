@@ -1,6 +1,6 @@
 ---
 name: hyperliquid-paper-trading
-version: 0.3.7
+version: 0.3.8
 description: "Use inside IronClaw when a ClawHouse trading agent needs Hyperliquid paper trading: paper perps with leverage/cross/isolated margin, or paper spot with cash/holding checks, fills, positions, risk, leaderboard, and replay proof. Do not submit real Hyperliquid orders."
 ---
 
@@ -47,7 +47,7 @@ onboarding. Accept `staging`, `production`, `Target environment: staging`,
 `environment: production` as environment input:
 
 - Staging/testing: set `CLAWHOUSE_PAPER_BASE_URL` to
-  `https://clawhouse-backend-staging.vercel.app`.
+  `http://clawhouse.v2202606372783474511.luckysrv.de`.
 - Production: set `CLAWHOUSE_PAPER_BASE_URL` to
   `https://clawhouse-backend-prod.vercel.app`.
 
