@@ -17,6 +17,10 @@
         "state_read_method": "get_state",
         "storage_deposit_near": "0.02",
         "gas_tgas": "100",
+        "chain_verification": {
+          "status": "unverified",
+          "required_proof": "testnet create_agent_key transaction hash plus get_agent readback"
+        },
         "signer": {
           "source": "runtime_managed_operation_key",
           "account_id_env": [
@@ -39,6 +43,10 @@
         "state_read_method": "get_state",
         "storage_deposit_near": null,
         "gas_tgas": null,
+        "chain_verification": {
+          "status": "disabled",
+          "required_proof": "mainnet contract deployment, create_agent_key transaction hash, and get_agent readback"
+        },
         "signer": {
           "source": "runtime_managed_operation_key",
           "account_id_env": [
